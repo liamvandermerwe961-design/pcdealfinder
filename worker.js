@@ -1,4 +1,5 @@
 const JSON_HEADERS={"content-type":"application/json; charset=utf-8","cache-control":"no-store"};
+// Phase 15B deployment marker: ensure the production build consumes the current auth worker.
 const json=(data,status=200,extra={})=>new Response(JSON.stringify(data),{status,headers:{...JSON_HEADERS,...extra}});
 const uid=()=>crypto.randomUUID();
 const bytesHex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
