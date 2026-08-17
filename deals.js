@@ -6,7 +6,7 @@
   const money=n=>'R'+Number(n||0).toLocaleString('en-ZA');
   const load=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch{return f}};
   const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-  fetch('/api/catalog?live=1',{cache:'no-store'}).then(r=>r.json()).then(payload=>{
+  fetch('/api/catalog?live=1&refresh=1',{cache:'no-store'}).then(r=>r.json()).then(payload=>{
     const items=Array.isArray(payload.products)?payload.products:[];
     const history=load(HISTORY_KEY,{}),targets=load(TARGET_KEY,{}),today=new Date().toISOString().slice(0,10);
     items.forEach(p=>{const prices=(p.offers||[]).map(o=>Number(o.price)).filter(Boolean);if(!prices.length)return;history[p.id] ||= [];if(!history[p.id].some(x=>x.date===today)){history[p.id].push({date:today,price:Math.min(...prices)});history[p.id]=history[p.id].slice(-90)}});save(HISTORY_KEY,history);
