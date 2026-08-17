@@ -1,0 +1,1 @@
+const originalRender = window.render; window.render = function(list){ if(Array.isArray(window.products) && list === window.products) return originalRender(list.slice(0,6)); return originalRender(list); };
