@@ -1,0 +1,39 @@
+/* PCDealFinder — polished dark gamer UI layer */
+:root{
+  --g-bg:#05070b;--g-panel:#0b1018;--g-panel2:#101722;--g-line:#263242;
+  --g-text:#f5f7fb;--g-soft:#d7deea;--g-muted:#a9b4c3;--g-cyan:#00e5ff;--g-purple:#9b7cff;
+}
+body{background:radial-gradient(circle at 50% -10%,rgba(0,229,255,.12),transparent 34%),radial-gradient(circle at 90% 35%,rgba(155,124,255,.08),transparent 25%),var(--g-bg);color:var(--g-text)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 78%);z-index:-1}
+.nav{background:rgba(5,7,11,.88);border-bottom:1px solid rgba(0,229,255,.12);box-shadow:0 10px 35px rgba(0,0,0,.35)}
+.nav nav a{color:var(--g-soft)}
+.hero{min-height:680px;padding-top:155px}
+.hero h1{font-weight:950;text-shadow:0 8px 45px rgba(0,0,0,.65)}
+.hero p{color:var(--g-soft)}
+.pill{box-shadow:0 0 28px rgba(0,229,255,.08)}
+.searchWrap{background:rgba(10,15,23,.94);border-color:#344254;box-shadow:0 25px 90px rgba(0,0,0,.72),0 0 45px rgba(0,229,255,.05)}
+.searchWrap input{color:var(--g-text)}
+.searchWrap input::placeholder{color:#aeb9c8}
+.quick button{color:var(--g-soft);border-color:#334050;background:#0b1119}
+.section{position:relative}
+.section h2{color:var(--g-text);text-shadow:0 5px 25px rgba(0,0,0,.4)}
+.product{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.008) 42%),var(--g-panel);border-color:#2a3747;box-shadow:0 18px 55px rgba(0,0,0,.48)}
+.product:hover{border-color:rgba(0,229,255,.55);box-shadow:0 28px 70px rgba(0,0,0,.6),0 0 45px rgba(0,229,255,.07)}
+.productVisual{background:radial-gradient(circle at 50% 45%,rgba(0,229,255,.12),transparent 52%),linear-gradient(135deg,#080d14,#0d1520);border-bottom-color:#263444}
+.productPlaceholder{background:#0d1520;border-color:#3a4859}
+.productContent{padding:28px}
+.product h3,.bestPrice strong{color:var(--g-text)}
+.mpn,.bestPrice small,.productSpecs small{color:#9eabba}
+.productSpecs>div{background:#0a1018;border-color:#293646}
+.cats button{background:linear-gradient(145deg,#0d141e,#080d14);border-color:#2a3747;color:var(--g-text);box-shadow:0 12px 35px rgba(0,0,0,.28);transition:.22s ease}
+.cats button:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.55);box-shadow:0 18px 45px rgba(0,0,0,.45),0 0 28px rgba(0,229,255,.06)}
+.cats button span{color:var(--g-muted)}
+.builder{background:linear-gradient(145deg,rgba(0,229,255,.045),rgba(155,124,255,.035)),#090e16;border:1px solid #2c394a;border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.48);margin-bottom:60px}
+.builderForm{background:rgba(5,9,14,.58);border:1px solid #293747;border-radius:16px;padding:22px}
+.builderForm label span{color:var(--g-soft)}
+.builderForm select{background:#0d141d!important;color:var(--g-text)!important;border-color:#3a4858!important}
+.builderButton{box-shadow:0 0 30px rgba(0,229,255,.14)}
+.note{background:#0b1119!important;border-color:#2c3949!important;color:var(--g-soft)!important}
+.note span{color:#b7c1cf!important}
+footer{color:#aeb9c8!important;border-top-color:#263342!important}
+@media(max-width:800px){.nav nav{gap:12px}.nav nav a:nth-child(4),.nav nav a:nth-child(5){display:none}.hero{padding-top:110px}.hero h1{letter-spacing:-3px}.builder{border-radius:16px}}
