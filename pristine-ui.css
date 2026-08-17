@@ -2,20 +2,11 @@
 :root{--p-text:#f8fafc;--p-soft:#dce4ef;--p-muted:#aeb9c8;--p-line:#334155;--p-cyan:#00e5ff}
 .searchWrap{width:min(780px,calc(100% - 32px));min-height:68px;align-items:center;padding:7px 8px;border-radius:16px;background:rgba(8,13,20,.96);border:1px solid #3b4a5c;box-shadow:0 18px 55px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.025),0 0 45px rgba(0,229,255,.06)}
 .searchWrap:focus-within{border-color:rgba(0,229,255,.7);box-shadow:0 20px 65px rgba(0,0,0,.62),0 0 0 4px rgba(0,229,255,.07),0 0 55px rgba(0,229,255,.1)}
-.searchWrap>span{width:52px;flex:0 0 52px;color:#d8faff;font-size:24px}
-.searchWrap input{height:52px;line-height:52px;color:var(--p-text);font-size:15px;font-weight:600;letter-spacing:.05px}
-.searchWrap input::placeholder{color:#aeb9c8;opacity:1}
-.searchWrap button{height:52px;min-width:118px;padding:0 20px;border-radius:11px;background:linear-gradient(135deg,#00e5ff,#67efff);box-shadow:0 8px 25px rgba(0,229,255,.16);font-size:12px;letter-spacing:.3px}
-.searchWrap button:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(0,229,255,.28)}
+.searchWrap>span{width:52px;flex:0 0 52px;color:#d8faff;font-size:24px}.searchWrap input{height:52px;line-height:52px;color:var(--p-text);font-size:15px;font-weight:600;letter-spacing:.05px}.searchWrap input::placeholder{color:#aeb9c8;opacity:1}
+.searchWrap button{height:52px;min-width:118px;padding:0 20px;border-radius:11px;background:linear-gradient(135deg,#00e5ff,#67efff);box-shadow:0 8px 25px rgba(0,229,255,.16);font-size:12px;letter-spacing:.3px}.searchWrap button:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(0,229,255,.28)}
 .quick{margin-top:20px}.quick>span{color:#aeb9c8}.quick button{padding:8px 12px;border-radius:8px;color:#dce4ef;background:#0b1119;border-color:#344254}
-.sectionTop{padding-bottom:18px;border-bottom:1px solid rgba(148,163,184,.12)}
-.section h2{font-weight:900;letter-spacing:-1.5px}
-.product,.cats button,.builder,.note{backdrop-filter:blur(12px)}
-.product{border-radius:18px}
-.productContent{padding:30px}.productSpecs>div{min-width:115px;padding:10px 12px}.productSpecs b{color:#e7edf5}
-.dealButton{border-radius:9px!important;font-weight:850!important}.offer{border-color:#2c3949!important;background:#0b1119!important}
+.sectionTop{padding-bottom:18px;border-bottom:1px solid rgba(148,163,184,.12)}.section h2{font-weight:900;letter-spacing:-1.5px}.product,.cats button,.builder,.note{backdrop-filter:blur(12px)}.product{border-radius:18px}.productContent{padding:30px}.productSpecs>div{min-width:115px;padding:10px 12px}.productSpecs b{color:#e7edf5}.dealButton{border-radius:9px!important;font-weight:850!important}.offer{border-color:#2c3949!important;background:#0b1119!important}
 .cats{gap:14px}.cats button{border-radius:14px!important;padding:22px!important}.cats button b{font-size:18px}.cats button span{margin-top:4px;color:#aeb9c8!important}
-.builder{border-radius:22px!important;padding:48px 34px!important}.builderIntro p{color:#cbd5e1!important;max-width:680px;line-height:1.75}.builderForm{gap:14px!important}.builderForm label{gap:8px!important}.builderForm select{min-height:50px;border-radius:10px!important}.builderButton{min-height:50px;border-radius:10px!important}
-.note{border-radius:14px!important;box-shadow:0 12px 35px rgba(0,0,0,.25)}
-footer{color:#aeb9c8!important}
+.builder{border-radius:22px!important;padding:48px 34px!important}.builderIntro p{color:#cbd5e1!important;max-width:680px;line-height:1.75}.builderForm{gap:14px!important}.builderForm label{gap:8px!important}.builderForm select{min-height:50px;border-radius:10px!important}.builderButton{min-height:50px;border-radius:10px!important;font-weight:500!important;color:#082027!important}.builderButton:hover{font-weight:550!important}
+.note{border-radius:14px!important;box-shadow:0 12px 35px rgba(0,0,0,.25)}footer{color:#aeb9c8!important}
 @media(max-width:650px){.searchWrap{min-height:60px;padding:6px}.searchWrap>span{width:40px;flex-basis:40px}.searchWrap input{font-size:13px;height:46px;line-height:46px}.searchWrap button{min-width:92px;height:46px;padding:0 13px}.searchWrap button{font-size:11px}.builder{padding:32px 20px!important}}
