@@ -1,0 +1,11 @@
+/* Shared polish for all secondary pages */
+body{background:radial-gradient(circle at 50% -10%,rgba(0,229,255,.1),transparent 34%),radial-gradient(circle at 90% 25%,rgba(139,92,246,.07),transparent 28%),#05070b!important;color:#f5f7fb!important}
+main{color:#dce4ef!important}
+main h1,main h2,main h3{color:#f8fafc!important}
+main p,main li{color:#d5deea!important;line-height:1.75}
+main small{color:#aeb9c8!important}
+main a{color:#67efff!important}
+main input,main textarea,main select{background:#0b1119!important;color:#f5f7fb!important;border:1px solid #3a4858!important}
+main input::placeholder,main textarea::placeholder{color:#9eabba!important}
+main label{color:#dce4ef!important}
+footer{color:#aeb9c8!important}
