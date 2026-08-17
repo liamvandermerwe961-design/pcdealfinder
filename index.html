@@ -12,111 +12,32 @@
 <link rel="stylesheet" href="site-polish.css">
 <link rel="stylesheet" href="home-modern.css">
 <link rel="stylesheet" href="builder-modern.css">
+<link rel="stylesheet" href="aesthetic-upgrade.css">
 </head>
 <body>
 <header class="nav">
   <a class="brand" href="index.html"><span class="mark">PC</span>PCDealFinder <em>ZA</em></a>
-  <nav>
-    <a href="#categories">Categories</a>
-    <a href="#builder">PC Builder</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
+  <nav><a href="#categories">Categories</a><a href="#builder">PC Builder</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
   <button class="navSearch" type="button" onclick="focusSearch()">⌕ Search</button>
 </header>
-
 <main>
 <section class="hero homeHero">
   <div class="pill">🇿🇦 SOUTH AFRICAN PC HARDWARE COMPARISON</div>
   <h1>Find the part.<br><span>Find the deal.</span></h1>
   <p>Compare PC component offers in one clean place — then choose the retailer that makes the most sense for your build.</p>
-  <div class="searchWrap">
-    <span aria-hidden="true">⌕</span>
-    <input id="q" type="search" placeholder="Search RTX 5070, Ryzen 5 5600, SSD..." autocomplete="off" aria-label="Search PC hardware" onkeydown="if(event.key==='Enter') runSearch()">
-    <button type="button" onclick="runSearch()">Compare</button>
-  </div>
-  <div class="quick">
-    <span>Popular:</span>
-    <button type="button" onclick="search('Ryzen 5 5600')">Ryzen 5 5600</button>
-    <button type="button" onclick="search('RTX 5070 Ti')">RTX 5070 Ti</button>
-    <button type="button" onclick="search('SSD')">SSD</button>
-  </div>
+  <div class="searchWrap"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Search RTX 5070, Ryzen 5 5600, SSD..." autocomplete="off" aria-label="Search PC hardware" onkeydown="if(event.key==='Enter') runSearch()"><button type="button" onclick="runSearch()">Compare</button></div>
+  <div class="quick"><span>Popular:</span><button type="button" onclick="search('Ryzen 5 5600')">Ryzen 5 5600</button><button type="button" onclick="search('RTX 5070 Ti')">RTX 5070 Ti</button><button type="button" onclick="search('SSD')">SSD</button></div>
 </section>
-
-<section class="featuredSection">
-  <div class="featuredHeading">
-    <div><small>FEATURED PICKS</small><h2>See what's worth checking out.</h2></div>
-    <div class="sliderControls"><button id="featuredPrev" type="button" aria-label="Previous featured product">←</button><button id="featuredNext" type="button" aria-label="Next featured product">→</button></div>
-  </div>
-  <div class="featuredViewport">
-    <div id="featuredTrack" class="featuredTrack" aria-live="polite"></div>
-  </div>
-  <div id="featuredDots" class="featuredDots" aria-label="Featured product slides"></div>
-</section>
-
-<section id="categories" class="section categorySection">
-  <div class="sectionTop"><div><small>SHOP BY CATEGORY</small><h2>Browse your way.</h2></div><a class="sectionLink" href="parts.html">View full catalogue →</a></div>
-  <div class="categoryGroups">
-    <div class="categoryGroup">
-      <div class="groupTitle"><span class="groupIcon">▣</span><div><b>Components</b><small>Everything inside the PC</small></div></div>
-      <div class="categoryLinks">
-        <a href="cpu.html"><b>CPU</b><span>Processors</span></a>
-        <a href="gpu.html"><b>GPU</b><span>Graphics cards</span></a>
-        <a href="ram.html"><b>RAM</b><span>Memory</span></a>
-        <a href="ssd.html"><b>SSD</b><span>Solid-state storage</span></a>
-        <a href="hdd.html"><b>HDD</b><span>Hard drives</span></a>
-        <a href="motherboard.html"><b>Motherboards</b><span>AMD & Intel</span></a>
-        <a href="psu.html"><b>Power Supplies</b><span>PSUs</span></a>
-        <a href="category.html?category=Case"><b>PC Cases</b><span>Gaming chassis</span></a>
-        <a href="category.html?category=CPU Cooler"><b>Cooling</b><span>Air & liquid</span></a>
-      </div>
-    </div>
-    <div class="categoryGroup">
-      <div class="groupTitle"><span class="groupIcon">⌨</span><div><b>Peripherals</b><small>Build your gaming setup</small></div></div>
-      <div class="categoryLinks">
-        <a href="category.html?category=Monitor"><b>Monitors</b><span>Gaming displays</span></a>
-        <a href="category.html?category=Keyboard"><b>Keyboards</b><span>Mechanical & gaming</span></a>
-        <a href="category.html?category=Mouse"><b>Mice</b><span>Wired & wireless</span></a>
-        <a href="category.html?category=Headset"><b>Headsets</b><span>Gaming audio</span></a>
-        <a href="category.html?category=Mousepad"><b>Mousepads</b><span>Desk mats</span></a>
-        <a href="category.html?category=Speaker"><b>Speakers</b><span>Desktop audio</span></a>
-        <a href="category.html?category=Microphone"><b>Microphones</b><span>Streaming & voice</span></a>
-        <a href="category.html?category=Webcam"><b>Webcams</b><span>Streaming cameras</span></a>
-      </div>
-    </div>
-    <div class="categoryGroup">
-      <div class="groupTitle"><span class="groupIcon">✦</span><div><b>Accessories</b><small>The extras that complete it</small></div></div>
-      <div class="categoryLinks">
-        <a href="category.html?category=Networking"><b>Networking</b><span>Wi-Fi & networking</span></a>
-        <a href="category.html?category=External Storage"><b>External Storage</b><span>Portable storage</span></a>
-        <a href="category.html?category=Cable"><b>Cables</b><span>PC connectivity</span></a>
-        <a href="category.html?category=RGB"><b>RGB</b><span>Lighting & hubs</span></a>
-        <a href="category.html?category=USB"><b>USB Accessories</b><span>Hubs & devices</span></a>
-        <a href="category.html?category=Capture Card"><b>Capture Cards</b><span>Streaming hardware</span></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="builder" class="section builder">
-  <div class="builderIntro"><small>PC BUILDER</small><h2>Build around your budget.</h2><p>Set your budget, choose what you play and tell us how you want the build to perform. PCDealFinder will create a compatible starting-point build from the catalogue.</p></div>
-  <div class="builderForm">
-    <label><span>Budget</span><select id="buildBudget"><option value="10000">R10,000</option><option value="15000" selected>R15,000</option><option value="20000">R20,000</option><option value="25000">R25,000</option><option value="30000">R30,000</option></select></label>
-    <label><span>Game</span><select id="buildGame"><option value="fortnite">Fortnite</option><option value="warzone">Call of Duty: Warzone</option><option value="gta">GTA V</option><option value="cyberpunk">Cyberpunk 2077</option><option value="general">General gaming</option></select></label>
-    <label><span>Resolution</span><select id="buildResolution"><option value="1080p">1080p</option><option value="1440p">1440p</option><option value="4k">4K</option></select></label>
-    <label><span>Priority</span><select id="buildPriority"><option value="fps">Best FPS</option><option value="value" selected>Best value</option><option value="balanced">Balanced</option></select></label>
-    <button class="primary builderButton" type="button" onclick="generateBuild()">Build my PC →</button>
-  </div>
-  <div id="buildResult" class="buildResult"></div>
-</section>
-
-<section class="note"><b>Price information</b><span>Prices and stock availability may change. Always verify the final price and availability with the retailer before making a purchase.</span></section>
-</main>
-
+<section class="featuredSection"><div class="featuredHeading"><div><small>FEATURED PICKS</small><h2>See what's worth checking out.</h2></div><div class="sliderControls"><button id="featuredPrev" type="button" aria-label="Previous featured product">←</button><button id="featuredNext" type="button" aria-label="Next featured product">→</button></div></div><div class="featuredViewport"><div id="featuredTrack" class="featuredTrack" aria-live="polite"></div></div><div id="featuredDots" class="featuredDots" aria-label="Featured product slides"></div></section>
+<section id="categories" class="section categorySection"><div class="sectionTop"><div><small>SHOP BY CATEGORY</small><h2>Browse your way.</h2></div><a class="sectionLink" href="parts.html">View full catalogue →</a></div><div class="categoryGroups">
+<div class="categoryGroup"><div class="groupTitle"><span class="groupIcon">▣</span><div><b>Components</b><small>Everything inside the PC</small></div></div><div class="categoryLinks"><a href="cpu.html"><b>CPU</b><span>Processors</span></a><a href="gpu.html"><b>GPU</b><span>Graphics cards</span></a><a href="ram.html"><b>RAM</b><span>Memory</span></a><a href="ssd.html"><b>SSD</b><span>Solid-state storage</span></a><a href="hdd.html"><b>HDD</b><span>Hard drives</span></a><a href="motherboard.html"><b>Motherboards</b><span>AMD & Intel</span></a><a href="psu.html"><b>Power Supplies</b><span>PSUs</span></a><a href="category.html?category=Case"><b>PC Cases</b><span>Gaming chassis</span></a><a href="category.html?category=CPU Cooler"><b>Cooling</b><span>Air & liquid</span></a></div></div>
+<div class="categoryGroup"><div class="groupTitle"><span class="groupIcon">⌨</span><div><b>Peripherals</b><small>Build your gaming setup</small></div></div><div class="categoryLinks"><a href="category.html?category=Monitor"><b>Monitors</b><span>Gaming displays</span></a><a href="category.html?category=Keyboard"><b>Keyboards</b><span>Mechanical & gaming</span></a><a href="category.html?category=Mouse"><b>Mice</b><span>Wired & wireless</span></a><a href="category.html?category=Headset"><b>Headsets</b><span>Gaming audio</span></a><a href="category.html?category=Mousepad"><b>Mousepads</b><span>Desk mats</span></a><a href="category.html?category=Speaker"><b>Speakers</b><span>Desktop audio</span></a><a href="category.html?category=Microphone"><b>Microphones</b><span>Streaming & voice</span></a><a href="category.html?category=Webcam"><b>Webcams</b><span>Streaming cameras</span></a></div></div>
+<div class="categoryGroup"><div class="groupTitle"><span class="groupIcon">✦</span><div><b>Accessories</b><small>The extras that complete it</small></div></div><div class="categoryLinks"><a href="category.html?category=Networking"><b>Networking</b><span>Wi-Fi & networking</span></a><a href="category.html?category=External Storage"><b>External Storage</b><span>Portable storage</span></a><a href="category.html?category=Cable"><b>Cables</b><span>PC connectivity</span></a><a href="category.html?category=RGB"><b>RGB</b><span>Lighting & hubs</span></a><a href="category.html?category=USB"><b>USB Accessories</b><span>Hubs & devices</span></a><a href="category.html?category=Capture Card"><b>Capture Cards</b><span>Streaming hardware</span></a></div></div></div></section>
+<section id="builder" class="section builder"><div class="builderIntro"><small>PC BUILDER</small><h2>Build around your budget.</h2><p>Set your budget, choose what you play and tell us how you want the build to perform. PCDealFinder will create a compatible starting-point build from the catalogue.</p></div><div class="builderForm">
+<label><span>Budget</span><input id="buildBudget" type="range" min="8000" max="50000" step="1000" value="15000" aria-label="Build budget"></label>
+<label><span>Game</span><select id="buildGame"></select></label><label><span>Resolution</span><select id="buildResolution"><option value="1080p">1080p</option><option value="1440p">1440p</option><option value="4k">4K</option></select></label><label><span>Priority</span><select id="buildPriority"><option value="fps">Best FPS</option><option value="value" selected>Best value</option><option value="balanced">Balanced</option></select></label>
+<button class="primary builderButton" type="button" onclick="generateBuild()">Build my PC →</button></div><div id="buildResult" class="buildResult"></div></section>
+<section class="note"><b>Price information</b><span>Prices and stock availability may change. Always verify the final price and availability with the retailer before making a purchase.</span></section></main>
 <footer><b>PCDealFinder</b><span>Compare PC hardware in South Africa · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="affiliate.html">Affiliate Disclosure</a> · <a href="contact.html">Contact</a></span></footer>
-<script src="app.js"></script>
-<script src="stock-fix.js"></script>
-<script src="builder-enhancements.js"></script>
-<script src="home.js"></script>
-</body>
-</html>
+<script src="app.js"></script><script src="stock-fix.js"></script><script src="builder-enhancements.js"></script><script src="home.js"></script>
+</body></html>
