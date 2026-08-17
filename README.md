@@ -1,4 +1,4 @@
-# PCDealFinder V2
-Polished static MVP for the South African PC hardware comparison concept.
+# PCDealFinder V3
+Premium visual redesign + multi-retailer comparison MVP.
 
-The current product data is curated prototype data, not a live price feed. Retailer permissions, approved data feeds, product matching and affiliate tracking must be established before presenting listings as real-time or monetized.
+Current offers are demonstration data only. They are not live prices or stock and should be verified at the retailer. Affiliate tracking, retailer approval, and legitimate product-data feeds are required before monetization or live-price claims.
