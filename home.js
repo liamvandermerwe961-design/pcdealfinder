@@ -1,1 +1,6 @@
-const originalRender = window.render; window.render = function(list){ if(Array.isArray(window.products) && list === window.products) return originalRender(list.slice(0,6)); return originalRender(list); };
+// Homepage: keep the product catalogue off the landing page.
+// Products are intentionally available through the dedicated category pages.
+document.addEventListener('DOMContentLoaded',()=>{
+  const compare=document.getElementById('compare');
+  if(compare) compare.remove();
+});
