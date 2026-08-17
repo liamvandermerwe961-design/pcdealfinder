@@ -1,0 +1,2 @@
+const MIN={GPU:500,CPU:500,RAM:100,SSD:150,HDD:150,Motherboard:400,PSU:300,Case:250,Monitor:500,Keyboard:100,Mouse:80,Headset:150,'CPU Cooler':150,'Case Fan':50,Networking:100,Accessories:30,Cables:30,Speakers:100,'Gaming Devices':100,UPS:300};
+export function sanitizeProducts(products){return (products||[]).map(p=>({...p,offers:(p.offers||[]).filter(o=>{const n=Number(o?.price),m=Number(MIN[p?.category]||10);return Number.isFinite(n)&&n>=m&&n<=1000000}).sort((a,b)=>Number(a.price)-Number(b.price))})).filter(p=>p.offers.length)}
