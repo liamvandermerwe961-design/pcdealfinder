@@ -4,7 +4,7 @@ const json=(data,status=200,extra={})=>new Response(JSON.stringify(data),{status
 const uid=()=>crypto.randomUUID();
 const bytesHex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
 const hexBytes=h=>new Uint8Array((h.match(/.{1,2}/g)||[]).map(x=>parseInt(x,16)));
-async function derive(password,salt){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:120000,hash:'SHA-256'},base,256);return bytesHex(bits)}
+async function derive(password,salt){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},base,256);return bytesHex(bits)}
 async function hashPassword(password){const salt=crypto.getRandomValues(new Uint8Array(16));return `${bytesHex(salt)}$${await derive(password,salt)}`}
 async function verifyPassword(password,stored){const [s,h]=String(stored||'').split('$');if(!s||!h)return false;return (await derive(password,hexBytes(s)))===h}
 function cookieSession(id,maxAge=2592000){return `pcdf_session=${id}; Path=/; Max-Age=${maxAge}; HttpOnly; Secure; SameSite=Lax`}
