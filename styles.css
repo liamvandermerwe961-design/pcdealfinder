@@ -1,26 +1,27 @@
+```css
+/* =========================================================
+   PCDEALFINDER — COMPLETE DARK GAMER THEME
+========================================================= */
+
 :root {
-  --bg: #030508;
-  --bg2: #060a10;
+  --bg: #030507;
+  --bg2: #070a0f;
+  --card: #0a0e14;
+  --card2: #0e131b;
 
-  --card: #090d14;
-  --card2: #0d121b;
+  --border: #1b2531;
+  --border2: #263442;
 
-  --border: #1b2533;
-  --border-bright: #26364a;
-
-  --text: #f8fbff;
-  --text-soft: #d8e0ea;
-  --muted: #a6b1bf;
+  --text: #ffffff;
+  --text-soft: #d4dbe5;
+  --muted: #8d99a8;
 
   --cyan: #00e5ff;
-  --cyan-soft: rgba(0,229,255,.12);
-
+  --cyan-soft: #67efff;
   --purple: #8b5cf6;
-  --purple-soft: rgba(139,92,246,.12);
-
   --green: #4ade80;
 
-  --shadow: 0 25px 80px rgba(0,0,0,.65);
+  --shadow: 0 25px 70px rgba(0,0,0,.65);
 }
 
 * {
@@ -36,16 +37,11 @@ body {
 
   background:
     radial-gradient(
-      circle at 50% -10%,
-      rgba(0,229,255,.07),
-      transparent 32%
+      circle at 50% -15%,
+      rgba(0,229,255,.055),
+      transparent 35%
     ),
-    radial-gradient(
-      circle at 90% 30%,
-      rgba(139,92,246,.045),
-      transparent 30%
-    ),
-    #030508;
+    #030507;
 
   color: var(--text);
 
@@ -61,14 +57,44 @@ body {
   line-height: 1.6;
 }
 
+body::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.012) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.012) 1px,
+      transparent 1px
+    );
+
+  background-size: 60px 60px;
+
+  mask-image: linear-gradient(
+    to bottom,
+    black,
+    transparent 70%
+  );
+
+  z-index: -1;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
 button,
-input,
-select {
+select,
+input {
   font: inherit;
 }
 
@@ -80,6 +106,7 @@ button {
   color: var(--muted);
 }
 
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
@@ -89,7 +116,7 @@ button {
   top: 0;
   z-index: 100;
 
-  min-height: 72px;
+  height: 76px;
 
   display: flex;
   align-items: center;
@@ -97,66 +124,63 @@ button {
 
   padding: 0 6%;
 
-  background: rgba(3,5,8,.94);
+  background: rgba(3,5,7,.94);
+
+  border-bottom: 1px solid #111820;
 
   backdrop-filter: blur(20px);
-
-  border-bottom: 1px solid #111923;
 }
 
 .brand {
   display: flex;
   align-items: center;
-
-  gap: 10px;
+  gap: 11px;
 
   color: #ffffff;
 
   font-size: 19px;
   font-weight: 900;
-
   letter-spacing: -.5px;
 }
 
 .brand em {
   color: var(--cyan);
 
+  font-size: 10px;
   font-style: normal;
+  font-weight: 900;
 
-  font-size: 11px;
-
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
 }
 
 .mark {
-  width: 35px;
-  height: 35px;
+  width: 36px;
+  height: 36px;
 
   display: grid;
   place-items: center;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
-  background: #07151b;
+  background: var(--cyan);
 
-  border: 1px solid rgba(0,229,255,.5);
-
-  color: var(--cyan);
+  color: #020507;
 
   font-size: 11px;
-  font-weight: 950;
+  font-weight: 1000;
 
   box-shadow:
-    0 0 25px rgba(0,229,255,.12);
+    0 0 25px rgba(0,229,255,.18);
 }
 
 .nav nav {
   display: flex;
+  align-items: center;
   gap: 30px;
 }
 
 .nav nav a {
-  color: #d9e1eb;
+  color: #cbd5e1;
 
   font-size: 13px;
   font-weight: 700;
@@ -171,14 +195,15 @@ button {
 .navSearch {
   padding: 9px 16px;
 
-  border: 1px solid #202b39;
+  background: #070b10;
 
-  border-radius: 8px;
+  border: 1px solid var(--border2);
 
-  background: #080c12;
+  border-radius: 7px;
 
-  color: #edf3f9;
+  color: #ffffff;
 
+  font-size: 12px;
   font-weight: 800;
 
   transition: .2s ease;
@@ -188,7 +213,11 @@ button {
   border-color: var(--cyan);
 
   color: var(--cyan);
+
+  box-shadow:
+    0 0 20px rgba(0,229,255,.08);
 }
+
 
 /* =========================================================
    HERO
@@ -197,13 +226,17 @@ button {
 .hero {
   position: relative;
 
-  max-width: 1150px;
+  max-width: 1200px;
+
+  min-height: 650px;
 
   margin: 0 auto;
 
-  padding: 125px 24px 100px;
+  padding: 145px 24px 110px;
 
   text-align: center;
+
+  overflow: hidden;
 }
 
 .hero::before {
@@ -211,61 +244,95 @@ button {
 
   position: absolute;
 
-  top: 40px;
-  left: 15%;
-  right: 15%;
+  width: 700px;
+  height: 700px;
 
-  height: 250px;
+  left: 50%;
+  top: -300px;
 
-  background: rgba(0,229,255,.065);
+  transform: translateX(-50%);
 
-  filter: blur(110px);
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,229,255,.11),
+      rgba(0,229,255,.025) 40%,
+      transparent 70%
+    );
 
   pointer-events: none;
 }
 
+.hero::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 0;
+
+  width: 75%;
+  height: 1px;
+
+  transform: translateX(-50%);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0,229,255,.25),
+      transparent
+    );
+}
+
 .pill {
   position: relative;
+  z-index: 2;
 
-  display: inline-block;
+  display: inline-flex;
 
   padding: 7px 14px;
 
-  border: 1px solid rgba(0,229,255,.32);
+  background: #061116;
+
+  border: 1px solid rgba(0,229,255,.3);
 
   border-radius: 999px;
-
-  background: rgba(0,229,255,.055);
 
   color: var(--cyan);
 
   font-size: 10px;
-
   font-weight: 900;
 
-  letter-spacing: 1.4px;
+  letter-spacing: 1.5px;
+
+  box-shadow:
+    0 0 25px rgba(0,229,255,.04);
 }
 
 .hero h1 {
   position: relative;
+  z-index: 2;
 
-  margin: 26px 0 20px;
+  margin: 30px 0 22px;
 
   color: #ffffff;
 
-  font-size: clamp(50px, 8vw, 90px);
+  font-size: clamp(58px, 8vw, 96px);
 
-  line-height: .96;
+  line-height: .94;
 
-  letter-spacing: -5px;
+  letter-spacing: -6px;
+
+  font-weight: 950;
 }
 
 .hero h1 span {
   background:
     linear-gradient(
       90deg,
-      #00e5ff,
-      #66efff 45%,
+      var(--cyan),
+      #ffffff 48%,
       #a78bfa
     );
 
@@ -277,15 +344,19 @@ button {
 
 .hero p {
   position: relative;
+  z-index: 2;
 
-  max-width: 650px;
+  max-width: 620px;
 
-  margin: 0 auto 34px;
+  margin: 0 auto 38px;
 
-  color: #d2dbe6;
+  color: #cbd5e1;
 
-  font-size: 17px;
+  font-size: 16px;
+
+  line-height: 1.7;
 }
+
 
 /* =========================================================
    SEARCH
@@ -293,23 +364,24 @@ button {
 
 .searchWrap {
   position: relative;
+  z-index: 3;
 
   display: flex;
 
-  max-width: 730px;
+  max-width: 760px;
 
   margin: 0 auto;
 
-  padding: 6px;
+  padding: 7px;
 
-  background: #070b11;
+  background: #05080c;
 
-  border: 1px solid #243040;
+  border: 1px solid #263442;
 
-  border-radius: 13px;
+  border-radius: 10px;
 
   box-shadow:
-    0 20px 60px rgba(0,0,0,.55);
+    0 25px 80px rgba(0,0,0,.7);
 }
 
 .searchWrap > span {
@@ -320,7 +392,7 @@ button {
 
   color: var(--cyan);
 
-  font-size: 22px;
+  font-size: 21px;
 }
 
 .searchWrap input {
@@ -329,31 +401,31 @@ button {
   min-width: 0;
 
   border: 0;
-
   outline: 0;
 
   background: transparent;
 
   color: #ffffff;
 
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .searchWrap input::placeholder {
-  color: #9aa7b6;
+  color: #7f8b99;
 }
 
 .searchWrap button {
+  min-width: 105px;
+
   border: 0;
 
-  padding: 13px 23px;
-
-  border-radius: 8px;
+  border-radius: 7px;
 
   background: var(--cyan);
 
-  color: #001015;
+  color: #020608;
 
+  font-size: 12px;
   font-weight: 950;
 
   transition: .2s ease;
@@ -363,10 +435,13 @@ button {
   transform: translateY(-1px);
 
   box-shadow:
-    0 0 30px rgba(0,229,255,.3);
+    0 0 30px rgba(0,229,255,.35);
 }
 
 .quick {
+  position: relative;
+  z-index: 2;
+
   display: flex;
 
   justify-content: center;
@@ -380,30 +455,35 @@ button {
 }
 
 .quick > span {
-  color: #aab5c2;
+  color: #7f8b99;
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .quick button {
-  padding: 6px 11px;
+  padding: 6px 10px;
 
-  border: 1px solid #202c3b;
+  background: #070a0f;
 
-  border-radius: 7px;
+  border: 1px solid #202b37;
 
-  background: #080c12;
+  border-radius: 6px;
 
-  color: #dbe4ed;
+  color: #cbd5e1;
 
-  font-size: 12px;
+  font-size: 11px;
+
+  transition: .2s ease;
 }
 
 .quick button:hover {
   border-color: var(--cyan);
 
   color: var(--cyan);
+
+  background: #071116;
 }
+
 
 /* =========================================================
    SECTIONS
@@ -414,7 +494,7 @@ button {
 
   margin: 0 auto;
 
-  padding: 85px 24px;
+  padding: 90px 24px;
 }
 
 .sectionTop {
@@ -423,7 +503,7 @@ button {
   justify-content: space-between;
   align-items: end;
 
-  margin-bottom: 26px;
+  margin-bottom: 28px;
 }
 
 .section small,
@@ -431,8 +511,7 @@ button {
   color: var(--cyan);
 
   font-size: 10px;
-
-  font-weight: 950;
+  font-weight: 900;
 
   letter-spacing: 1.7px;
 }
@@ -449,8 +528,9 @@ button {
   letter-spacing: -1.8px;
 }
 
+
 /* =========================================================
-   PRODUCT CARDS
+   PRODUCT RESULTS
 ========================================================= */
 
 .results {
@@ -465,17 +545,17 @@ button {
   background:
     linear-gradient(
       145deg,
-      rgba(255,255,255,.018),
-      transparent 45%
+      rgba(255,255,255,.025),
+      transparent 35%
     ),
-    #080c12;
+    #090d13;
 
-  border: 1px solid #1d2836;
+  border: 1px solid #1d2834;
 
   border-radius: 15px;
 
   box-shadow:
-    0 20px 60px rgba(0,0,0,.42);
+    0 18px 50px rgba(0,0,0,.4);
 
   transition: .25s ease;
 }
@@ -483,16 +563,103 @@ button {
 .product:hover {
   transform: translateY(-3px);
 
-  border-color: rgba(0,229,255,.38);
+  border-color: rgba(0,229,255,.35);
 
   box-shadow:
-    0 25px 70px rgba(0,0,0,.6),
-    0 0 35px rgba(0,229,255,.06);
+    0 25px 60px rgba(0,0,0,.55),
+    0 0 35px rgba(0,229,255,.04);
 }
 
+
+/* PRODUCT VISUAL */
+
 .productVisual {
-  display: none;
+  position: relative;
+
+  min-height: 145px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(0,229,255,.07),
+      transparent 55%
+    ),
+    #06090e;
+
+  border-bottom: 1px solid #19232e;
 }
+
+.productGlow {
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 50%;
+
+  background: rgba(0,229,255,.08);
+
+  filter: blur(50px);
+}
+
+.productPlaceholder {
+  position: relative;
+  z-index: 2;
+
+  width: 82px;
+  height: 82px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid #263442;
+
+  border-radius: 18px;
+
+  background: #0a0f16;
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,.5);
+}
+
+.productPlaceholder span {
+  font-size: 35px;
+
+  filter:
+    drop-shadow(
+      0 0 12px rgba(0,229,255,.3)
+    );
+}
+
+.dealBadge {
+  position: absolute;
+
+  top: 15px;
+  left: 15px;
+
+  padding: 5px 9px;
+
+  border-radius: 5px;
+
+  background: #07150d;
+
+  border: 1px solid rgba(74,222,128,.25);
+
+  color: var(--green);
+
+  font-size: 9px;
+  font-weight: 900;
+
+  letter-spacing: .7px;
+}
+
+
+/* PRODUCT CONTENT */
 
 .productContent {
   padding: 25px;
@@ -513,15 +680,18 @@ button {
 
   padding: 4px 8px;
 
-  border-radius: 5px;
+  background: rgba(0,229,255,.07);
 
-  background: rgba(0,229,255,.08);
+  border: 1px solid rgba(0,229,255,.12);
+
+  border-radius: 5px;
 
   color: var(--cyan);
 
-  font-size: 10px;
+  font-size: 9px;
+  font-weight: 900;
 
-  font-weight: 950;
+  letter-spacing: 1px;
 }
 
 .product h3 {
@@ -531,19 +701,19 @@ button {
 
   font-size: 20px;
 
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .mpn {
   margin-top: 5px;
 
-  color: #a0acba;
+  color: #7f8b99;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .bestPrice {
-  min-width: 160px;
+  min-width: 145px;
 
   text-align: right;
 }
@@ -551,93 +721,93 @@ button {
 .bestPrice small {
   display: block;
 
-  color: #aab5c2;
+  color: #7f8b99;
 
   font-size: 9px;
-
   font-weight: 900;
 
-  letter-spacing: .7px;
+  letter-spacing: .8px;
 }
 
 .bestPrice strong {
   display: block;
 
+  margin-top: 2px;
+
   color: #ffffff;
 
   font-size: 27px;
 
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .bestPrice span {
   color: var(--green);
 
-  font-size: 11px;
-
+  font-size: 10px;
   font-weight: 700;
 }
 
-/* =========================================================
-   SPECS
-========================================================= */
+
+/* SPECS */
 
 .productSpecs {
   display: flex;
 
   flex-wrap: wrap;
 
-  gap: 10px;
+  gap: 8px;
 
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .productSpecs > div {
-  min-width: 110px;
+  min-width: 105px;
 
-  padding: 10px 12px;
+  padding: 9px 11px;
 
-  background: #060a0f;
+  background: #070b10;
 
-  border: 1px solid #172231;
+  border: 1px solid #18232e;
 
-  border-radius: 8px;
+  border-radius: 7px;
 }
 
 .productSpecs small {
   display: block;
 
-  color: #8f9cab;
+  color: #74808e;
 
   font-size: 8px;
-
   font-weight: 900;
 
   letter-spacing: .8px;
 }
 
 .productSpecs b {
-  color: #edf3f9;
+  display: block;
 
-  font-size: 12px;
+  margin-top: 2px;
+
+  color: #e8edf4;
+
+  font-size: 11px;
 }
 
-/* =========================================================
-   OFFERS
-========================================================= */
+
+/* OFFERS */
 
 .offerTitle {
   display: flex;
 
   justify-content: space-between;
 
-  margin-top: 22px;
-  margin-bottom: 8px;
+  margin-top: 25px;
+  margin-bottom: 9px;
 
-  color: #aeb9c7;
+  color: #7f8b99;
 
-  font-size: 10px;
-
+  font-size: 9px;
   font-weight: 900;
 
   letter-spacing: 1px;
@@ -646,7 +816,7 @@ button {
 .offers {
   overflow: hidden;
 
-  border: 1px solid #192534;
+  border: 1px solid #19232e;
 
   border-radius: 9px;
 }
@@ -654,17 +824,16 @@ button {
 .offer {
   display: flex;
 
-  align-items: center;
-
   justify-content: space-between;
+  align-items: center;
 
   gap: 20px;
 
-  padding: 15px 17px;
+  padding: 14px 15px;
 
   background: #070b10;
 
-  border-bottom: 1px solid #151f2b;
+  border-bottom: 1px solid #151f29;
 }
 
 .offer:last-child {
@@ -686,45 +855,45 @@ button {
   display: grid;
   place-items: center;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
-  background: #101722;
+  background: #111923;
 
-  border: 1px solid #243244;
+  border: 1px solid #263442;
 
   color: var(--cyan);
 
+  font-size: 12px;
   font-weight: 900;
 }
 
-.offer b {
+.retailerInfo b {
   display: block;
 
   color: #ffffff;
 
-  font-size: 14px;
+  font-size: 12px;
 }
 
-.offer small {
-  color: #a7b2c0;
+.retailerInfo small {
+  display: flex;
 
-  font-size: 11px;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #7f8b99;
+
+  font-size: 9px;
 }
 
 .stockDot {
-  display: inline-block;
-
-  width: 6px;
-  height: 6px;
-
-  margin-right: 5px;
+  width: 5px;
+  height: 5px;
 
   border-radius: 50%;
 
   background: var(--green);
-
-  box-shadow:
-    0 0 8px rgba(74,222,128,.5);
 }
 
 .offerRight {
@@ -738,46 +907,49 @@ button {
 .offerPrice {
   color: #ffffff;
 
-  font-size: 17px;
-
-  font-weight: 950;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .lowestLabel {
   padding: 3px 6px;
 
-  border-radius: 4px;
+  background: rgba(74,222,128,.08);
 
-  background: rgba(74,222,128,.1);
+  border: 1px solid rgba(74,222,128,.18);
+
+  border-radius: 4px;
 
   color: var(--green);
 
   font-size: 8px;
-
-  font-weight: 950;
+  font-weight: 900;
 }
 
 .dealButton {
-  padding: 7px 11px;
+  padding: 7px 10px;
 
-  border: 1px solid rgba(0,229,255,.3);
+  background: #071116;
+
+  border: 1px solid rgba(0,229,255,.25);
 
   border-radius: 6px;
 
   color: var(--cyan);
 
-  font-size: 10px;
-
+  font-size: 9px;
   font-weight: 900;
+
+  transition: .2s ease;
 }
 
 .dealButton:hover {
-  background: rgba(0,229,255,.08);
-}
+  background: var(--cyan);
 
-/* =========================================================
-   PRODUCT FOOTER
-========================================================= */
+  color: #020608;
+
+  border-color: var(--cyan);
+}
 
 .productFooter {
   display: flex;
@@ -786,12 +958,48 @@ button {
 
   gap: 15px;
 
-  margin-top: 13px;
+  margin-top: 17px;
 
-  color: #8f9baa;
+  color: #697583;
 
-  font-size: 10px;
+  font-size: 9px;
 }
+
+
+/* =========================================================
+   EMPTY RESULTS
+========================================================= */
+
+.emptyState {
+  padding: 70px 25px;
+
+  text-align: center;
+
+  background: #080c12;
+
+  border: 1px solid #1b2632;
+
+  border-radius: 14px;
+}
+
+.emptyIcon {
+  color: var(--cyan);
+
+  font-size: 35px;
+}
+
+.emptyState h3 {
+  margin: 10px 0 5px;
+
+  color: #ffffff;
+}
+
+.emptyState p {
+  margin: 0;
+
+  color: var(--muted);
+}
+
 
 /* =========================================================
    CATEGORIES
@@ -800,46 +1008,76 @@ button {
 .cats {
   display: grid;
 
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns:
+    repeat(6, 1fr);
 
   gap: 12px;
 
-  margin-top: 25px;
+  margin-top: 28px;
 }
 
 .cats button {
-  min-height: 110px;
+  position: relative;
 
-  padding: 18px;
+  min-height: 120px;
+
+  padding: 20px;
 
   text-align: left;
 
-  background: #080c12;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.025),
+      transparent
+    ),
+    #080c12;
 
-  border: 1px solid #1b2735;
+  border: 1px solid #1b2632;
 
   border-radius: 12px;
 
   color: #ffffff;
 
-  transition: .2s ease;
+  transition: .25s ease;
+
+  overflow: hidden;
+}
+
+.cats button::after {
+  content: "";
+
+  position: absolute;
+
+  width: 70px;
+  height: 70px;
+
+  right: -30px;
+  bottom: -30px;
+
+  background: rgba(0,229,255,.08);
+
+  border-radius: 50%;
+
+  filter: blur(20px);
 }
 
 .cats button:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 
-  border-color: var(--cyan);
+  border-color: rgba(0,229,255,.4);
 
-  background: #0a1119;
+  background: #0b1118;
 
   box-shadow:
-    0 15px 35px rgba(0,0,0,.35);
+    0 15px 35px rgba(0,0,0,.4),
+    0 0 25px rgba(0,229,255,.04);
 }
 
 .cats b {
   display: block;
 
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 
   color: #ffffff;
 
@@ -847,62 +1085,72 @@ button {
 }
 
 .cats span {
-  color: #a9b4c1;
+  color: #8d99a8;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
+
 /* =========================================================
-   BUILDER
+   PC BUILDER
 ========================================================= */
 
 .builder {
-  margin-top: 30px;
+  margin-top: 20px;
 
-  padding-top: 80px;
-
-  border-top: 1px solid #101721;
+  padding-top: 90px;
 }
 
 .builderIntro {
-  max-width: 650px;
+  max-width: 680px;
 }
 
 .builderIntro h2 {
-  margin: 8px 0 12px;
+  margin: 7px 0 12px;
 
   color: #ffffff;
 
-  font-size: 43px;
+  font-size: 44px;
 
-  letter-spacing: -2px;
+  line-height: 1;
+
+  letter-spacing: -2.5px;
 }
 
 .builderIntro p {
-  color: #d0d9e3;
+  color: #b9c3cf;
 
   font-size: 15px;
+
+  line-height: 1.7;
 }
 
 .builderForm {
   display: grid;
 
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns:
+    repeat(4, 1fr);
 
   gap: 12px;
 
-  margin-top: 30px;
+  margin-top: 32px;
 
-  padding: 20px;
+  padding: 22px;
 
-  background: #080c12;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0,229,255,.025),
+      transparent
+    ),
+    #080c12;
 
-  border: 1px solid #1c2836;
+  border: 1px solid #1d2834;
 
-  border-radius: 15px;
+  border-radius: 14px;
 
   box-shadow:
-    0 20px 60px rgba(0,0,0,.35);
+    0 20px 50px rgba(0,0,0,.4);
 }
 
 .builderForm label {
@@ -914,11 +1162,10 @@ button {
 }
 
 .builderForm label span {
-  color: #d8e1eb;
+  color: #cbd5e1;
 
-  font-size: 11px;
-
-  font-weight: 850;
+  font-size: 10px;
+  font-weight: 900;
 }
 
 .builderForm select {
@@ -926,11 +1173,11 @@ button {
 
   padding: 12px;
 
-  background: #05080d;
+  background: #05080c;
 
-  border: 1px solid #202c3a;
+  border: 1px solid #24313e;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
   color: #ffffff;
 
@@ -941,7 +1188,7 @@ button {
   border-color: var(--cyan);
 
   box-shadow:
-    0 0 0 2px rgba(0,229,255,.07);
+    0 0 15px rgba(0,229,255,.06);
 }
 
 .builderButton,
@@ -952,9 +1199,9 @@ button {
 
   border-radius: 8px;
 
-  font-weight: 950;
+  font-weight: 900;
 
-  transition: .2s ease;
+  transition: .25s ease;
 }
 
 .builderButton {
@@ -962,53 +1209,60 @@ button {
 
   background: var(--cyan);
 
-  color: #001015;
+  color: #020608;
 }
 
 .builderButton:hover {
+  transform: translateY(-2px);
+
   box-shadow:
-    0 0 30px rgba(0,229,255,.25);
+    0 0 30px rgba(0,229,255,.3);
 }
 
 .builderAIButton {
-  background: #090d15;
+  background:
+    linear-gradient(
+      90deg,
+      #100c1d,
+      #0a1119
+    );
 
-  border: 1px solid rgba(139,92,246,.5);
+  border: 1px solid rgba(139,92,246,.4);
 
   color: #ffffff;
 }
 
 .builderAIButton:hover {
-  border-color: #a78bfa;
+  transform: translateY(-2px);
 
-  background: #0d101b;
+  border-color: var(--purple);
 
   box-shadow:
     0 0 30px rgba(139,92,246,.18);
 }
+
 
 /* =========================================================
    BUILD RESULT
 ========================================================= */
 
 .buildResult {
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .buildResultHead {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   padding: 22px;
 
-  background: #080c12;
+  background: #090e14;
 
-  border: 1px solid #1d2836;
+  border: 1px solid #1c2834;
 
-  border-radius: 13px 13px 0 0;
+  border-radius: 12px 12px 0 0;
 }
 
 .buildResultHead h3 {
@@ -1026,7 +1280,7 @@ button {
 .buildTotal small {
   display: block;
 
-  color: #9ba7b5;
+  color: #7f8b99;
 
   font-size: 9px;
 }
@@ -1034,13 +1288,13 @@ button {
 .buildTotal strong {
   color: var(--cyan);
 
-  font-size: 25px;
+  font-size: 26px;
 }
 
 .buildParts {
-  background: #05090e;
+  background: #060a0f;
 
-  border: 1px solid #1d2836;
+  border: 1px solid #1c2834;
 
   border-top: 0;
 }
@@ -1049,12 +1303,11 @@ button {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   padding: 17px 22px;
 
-  border-bottom: 1px solid #121b26;
+  border-bottom: 1px solid #131d27;
 }
 
 .buildPart:last-child {
@@ -1068,21 +1321,21 @@ button {
 }
 
 .buildPart small {
-  color: #9ba7b5;
+  color: #74808e;
 
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .buildPart b {
   color: #ffffff;
 
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .buildPart strong {
   color: #ffffff;
 
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .buildSummary {
@@ -1094,41 +1347,52 @@ button {
 
   padding: 18px 22px;
 
-  background: #090e15;
+  background: #090f16;
 
-  border: 1px solid #1d2836;
+  border: 1px solid #1c2834;
 
   border-top: 0;
 }
 
 .buildSummary span {
-  color: #cbd5e1;
+  color: #aeb8c5;
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .buildSummary b {
   color: #ffffff;
 }
 
+.buildResult > p {
+  padding: 0 5px;
+}
+
+
 /* =========================================================
-   AI
+   AI ANSWER
 ========================================================= */
 
 .aiAnswer {
-  padding: 24px;
+  padding: 25px;
 
-  background: #080c12;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(139,92,246,.035),
+      transparent
+    ),
+    #090d14;
 
-  border: 1px solid #1d2836;
+  border: 1px solid #1d2834;
 
   border-top: 0;
 
-  border-radius: 0 0 13px 13px;
+  border-radius: 0 0 12px 12px;
 
-  color: #d5dee8;
+  color: #cbd5e1;
 
-  font-size: 15px;
+  font-size: 14px;
 
   line-height: 1.75;
 }
@@ -1138,14 +1402,15 @@ button {
   color: #ffffff;
 }
 
+
 /* =========================================================
-   NOTE
+   PROTOTYPE NOTE
 ========================================================= */
 
 .note {
-  max-width: 1050px;
+  max-width: 1100px;
 
-  margin: 30px auto 80px;
+  margin: 20px auto 80px;
 
   padding: 18px 22px;
 
@@ -1155,7 +1420,7 @@ button {
 
   background: #070b10;
 
-  border: 1px solid #1a2532;
+  border: 1px solid #1a2530;
 
   border-radius: 9px;
 }
@@ -1164,13 +1429,16 @@ button {
   color: var(--cyan);
 
   white-space: nowrap;
+
+  font-size: 11px;
 }
 
 .note span {
-  color: #9faab8;
+  color: #7f8b99;
 
-  font-size: 12px;
+  font-size: 11px;
 }
+
 
 /* =========================================================
    FOOTER
@@ -1183,15 +1451,15 @@ footer {
 
   gap: 20px;
 
-  padding: 35px 6%;
+  padding: 38px 6%;
 
-  background: #020406;
+  background: #020304;
 
-  border-top: 1px solid #111923;
+  border-top: 1px solid #111820;
 
-  color: #8f9baa;
+  color: #6f7b89;
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 footer b {
@@ -1199,18 +1467,21 @@ footer b {
 }
 
 footer a {
-  color: #c9d2dd;
+  color: #aeb8c5;
+
+  transition: .2s ease;
 }
 
 footer a:hover {
   color: var(--cyan);
 }
 
+
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
 
   .nav {
     padding: 0 20px;
@@ -1221,29 +1492,45 @@ footer a:hover {
   }
 
   .hero {
-    padding-top: 80px;
+    padding-top: 100px;
   }
 
   .cats {
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns:
+      repeat(3, 1fr);
   }
 
   .builderForm {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+      repeat(2, 1fr);
   }
+
 }
 
-@media (max-width: 600px) {
+
+@media (max-width: 650px) {
+
+  .nav {
+    height: 68px;
+  }
 
   .hero {
-    padding-left: 18px;
-    padding-right: 18px;
+    min-height: auto;
+
+    padding:
+      85px
+      18px
+      75px;
   }
 
   .hero h1 {
-    font-size: 50px;
+    font-size: 52px;
 
     letter-spacing: -3px;
+  }
+
+  .hero p {
+    font-size: 14px;
   }
 
   .searchWrap {
@@ -1251,11 +1538,21 @@ footer a:hover {
   }
 
   .searchWrap input {
-    height: 46px;
+    height: 44px;
   }
 
   .searchWrap button {
     width: 100%;
+
+    height: 44px;
+  }
+
+  .section {
+    padding: 65px 18px;
+  }
+
+  .section h2 {
+    font-size: 30px;
   }
 
   .productTop {
@@ -1266,22 +1563,35 @@ footer a:hover {
     text-align: left;
   }
 
+  .bestPrice strong {
+    font-size: 24px;
+  }
+
+  .productContent {
+    padding: 20px;
+  }
+
   .offer {
     align-items: flex-start;
   }
 
   .offerRight {
-    flex-wrap: wrap;
-
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
   }
 
   .productFooter {
     flex-direction: column;
+    gap: 4px;
   }
 
   .cats {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .builderIntro h2 {
+    font-size: 36px;
   }
 
   .builderForm {
@@ -1291,10 +1601,6 @@ footer a:hover {
   .builderButton,
   .builderAIButton {
     grid-column: span 1;
-  }
-
-  .builderIntro h2 {
-    font-size: 34px;
   }
 
   .buildResultHead {
@@ -1316,5 +1622,11 @@ footer a:hover {
   .note {
     margin-left: 18px;
     margin-right: 18px;
+
+    flex-direction: column;
+
+    gap: 5px;
   }
 }
+```
+
