@@ -1096,4 +1096,133 @@ function generateBuild() {
 
 }
 
-     
+/* =========================================================
+   AI PC BUILDER
+========================================================= */
+
+async function askPCDealFinderAI() {
+
+  const budget =
+    Number(document.getElementById('buildBudget')?.value || 0);
+
+  const game =
+    document.getElementById('buildGame')?.value || 'general';
+
+  const resolution =
+    document.getElementById('buildResolution')?.value || '1080p';
+
+  const priority =
+    document.getElementById('buildPriority')?.value || 'value';
+
+  const result =
+    document.getElementById('buildResult');
+
+  if (!result) return;
+
+  if (!budget || budget <= 0) {
+    result.innerHTML = `
+      <p class="muted">
+        Please choose a valid budget first.
+      </p>
+    `;
+    return;
+  }
+
+  result.innerHTML = `
+    <div class="buildResultHead">
+      <div>
+        <small>PCDEALFINDER AI</small>
+        <h3>Thinking about your build...</h3>
+      </div>
+    </div>
+
+    <p class="muted">
+      Analysing your budget, game, resolution and available hardware.
+    </p>
+  `;
+
+  try {
+
+    const response = await fetch(
+      'https://pcdealfinder-ai.liamvandermerwe961.workers.dev',
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+
+          budget,
+          game,
+          resolution,
+          priority,
+
+          products
+
+        })
+
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('AI request failed');
+    }
+
+    const data = await response.json();
+
+    if (!data || !data.answer) {
+      throw new Error('Invalid AI response');
+    }
+
+    result.innerHTML = `
+      <div class="buildResultHead">
+
+        <div>
+          <small>PCDEALFINDER AI</small>
+
+          <h3>
+            AI Recommendation
+          </h3>
+        </div>
+
+      </div>
+
+      <div class="aiAnswer">
+        ${data.answer}
+      </div>
+    `;
+
+  } catch (error) {
+
+    console.error(
+      'PCDealFinder AI error:',
+      error
+    );
+
+    result.innerHTML = `
+      <div class="buildResultHead">
+
+        <div>
+          <small>AI UNAVAILABLE</small>
+
+          <h3>
+            Using PCDealFinder's normal builder
+          </h3>
+
+        </div>
+
+      </div>
+
+      <p class="muted">
+        The AI assistant could not be reached,
+        so we're generating your build normally.
+      </p>
+    `;
+
+    generateBuild();
+
+  }
+
+}     
