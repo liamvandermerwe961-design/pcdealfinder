@@ -13,5 +13,8 @@
       "database_name": "pcdealfinder-db",
       "database_id": "0902bb8c-1bb4-4be0-80cf-7bf6a8ef3990"
     }
-  ]
+  ],
+  "triggers": {
+    "crons": ["*/15 * * * *"]
+  }
 }
