@@ -1,0 +1,1 @@
+const renderWithStockFix = window.render; window.render = function(list){ if(Array.isArray(list)){ list.forEach(p=>(p.offers||[]).forEach(o=>{if(String(o.stock||'').toLowerCase()==='prototype') o.stock='Check retailer';})); } return renderWithStockFix(list); };
