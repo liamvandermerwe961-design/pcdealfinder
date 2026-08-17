@@ -1,78 +1,10 @@
-/* =========================================================
-   PCDEALFINDER — BUILDER CONTROLS
-   Budget slider + expanded game catalogue
-========================================================= */
-
-(function () {
-  const games = [
-    ['fortnite', 'Fortnite'],
-    ['warzone', 'Call of Duty: Warzone'],
-    ['gta', 'GTA V'],
-    ['cyberpunk', 'Cyberpunk 2077'],
-    ['valorant', 'Valorant'],
-    ['cs2', 'Counter-Strike 2'],
-    ['apex', 'Apex Legends'],
-    ['minecraft', 'Minecraft'],
-    ['rdr2', 'Red Dead Redemption 2'],
-    ['helldivers2', 'Helldivers 2'],
-    ['general', 'General gaming']
-  ];
-
-  function money(value) {
-    return 'R' + Number(value).toLocaleString('en-ZA');
-  }
-
-  function setupBudgetSlider() {
-    const old = document.getElementById('buildBudget');
-    if (!old || old.type === 'range') return;
-
-    const label = old.closest('label');
-    if (!label) return;
-
-    old.remove();
-
-    const wrap = document.createElement('div');
-    wrap.className = 'budgetSliderWrap';
-    wrap.innerHTML = `
-      <input id="buildBudget" class="budgetSlider" type="range" min="8000" max="50000" step="1000" value="15000" aria-label="Build budget">
-      <div class="budgetSliderMeta">
-        <span>R8,000</span>
-        <strong id="buildBudgetValue">R15,000</strong>
-        <span>R50,000</span>
-      </div>
-    `;
-
-    label.appendChild(wrap);
-
-    const slider = document.getElementById('buildBudget');
-    const value = document.getElementById('buildBudgetValue');
-
-    slider.addEventListener('input', () => {
-      value.textContent = money(slider.value);
-    });
-  }
-
-  function setupGames() {
-    const select = document.getElementById('buildGame');
-    if (!select) return;
-
-    select.innerHTML = games.map(([value, label]) =>
-      `<option value="${value}">${label}</option>`
-    ).join('');
-  }
-
-  function setupLabels() {
-    // Extend the builder's existing gameLabel() without changing its scoring logic.
-    const original = window.gameLabel;
-    window.gameLabel = function (game) {
-      const match = games.find(([value]) => value === game);
-      return match ? match[1] : (original ? original(game) : 'Gaming');
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    setupBudgetSlider();
-    setupGames();
-    setupLabels();
-  });
+/* PCDealFinder — builder interaction layer */
+(function(){
+  const games=[['fortnite','Fortnite'],['warzone','Call of Duty: Warzone'],['gta','GTA V'],['cyberpunk','Cyberpunk 2077'],['valorant','Valorant'],['cs2','Counter-Strike 2'],['apex','Apex Legends'],['minecraft','Minecraft'],['rdr2','Red Dead Redemption 2'],['helldivers2','Helldivers 2'],['general','General gaming']];
+  const money=v=>'R'+Number(v).toLocaleString('en-ZA');
+  function setupBudget(){const old=document.getElementById('buildBudget');if(!old||old.type==='range')return;const label=old.closest('label');if(!label)return;old.remove();const wrap=document.createElement('div');wrap.className='budgetSliderWrap';wrap.innerHTML='<input id="buildBudget" class="budgetSlider" type="range" min="8000" max="50000" step="1000" value="15000" aria-label="Build budget"><div class="budgetSliderMeta"><span>R8,000</span><strong id="buildBudgetValue">R15,000</strong><em id="buildBudgetTier">Mid-range</em><span>R50,000</span></div>';label.appendChild(wrap);const slider=document.getElementById('buildBudget');const value=document.getElementById('buildBudgetValue');const tier=document.getElementById('buildBudgetTier');const sync=()=>{const v=Number(slider.value),p=((v-8000)/42000)*100;value.textContent=money(v);tier.textContent=v<12000?'Entry':v<20000?'Mid-range':v<30000?'High-end':'Enthusiast';slider.style.background=`linear-gradient(90deg,var(--cyan) 0%,var(--cyan) ${p}%,#18222d ${p}%,#18222d 100%)`};slider.addEventListener('input',sync);sync()}
+  function setupGames(){const s=document.getElementById('buildGame');if(s)s.innerHTML=games.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}
+  function setupLabels(){const original=window.gameLabel;window.gameLabel=function(game){const m=games.find(([v])=>v===game);return m?m[1]:(original?original(game):'Gaming')}}
+  function wrapBuild(){const original=window.generateBuild;if(typeof original!=='function')return;window.generateBuild=function(){original();const result=document.getElementById('buildResult');if(!result||!result.querySelector('.buildResultHead'))return;const budget=Number(document.getElementById('buildBudget')?.value||15000);const resolution=document.getElementById('buildResolution')?.value||'1080p';const base=resolution==='4k'?72:resolution==='1440p'?84:100;const bars=[['1080p',Math.min(100,base+(resolution==='1080p'?8:0)),resolution==='4k'?'95+':resolution==='1440p'?'140+':'180+'],['1440p',Math.min(100,base-(resolution==='4k'?12:0)),resolution==='4k'?'60+':resolution==='1440p'?'100+':'140+'],['4K',Math.min(100,base-(resolution==='1080p'?35:resolution==='1440p'?18:0)),resolution==='4k'?'55+':resolution==='1440p'?'45+':'65+']];const panel=document.createElement('div');panel.className='performancePanel';panel.innerHTML='<h4>🎮 Estimated gaming performance</h4>'+bars.map(b=>`<div class="perfRow"><span>${b[0]}</span><div class="perfBar"><div class="perfFill" style="width:${b[1]}%"></div></div><b>${b[2]} FPS</b></div>`).join('')+'<div class="buildBudgetStatus">● '+money(Math.max(0,budget-(Number((result.querySelector('.buildTotal strong')?.textContent||'').replace(/[^0-9]/g,''))||0)))+' budget remaining</div>';result.appendChild(panel)}}
+  document.addEventListener('DOMContentLoaded',()=>{setupBudget();setupGames();setupLabels();setTimeout(wrapBuild,0)})
 })();
