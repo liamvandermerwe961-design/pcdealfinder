@@ -1,0 +1,14 @@
+/* PCDealFinder — readable inner pages */
+body{color:#f5f7fb!important;background:radial-gradient(circle at 50% -10%,rgba(0,229,255,.1),transparent 35%),#05070b!important}
+main{color:#f5f7fb!important}
+main h1,main h2,main h3,main h4{color:#f8fafc!important}
+main p,main li,main label{color:#d9e1ec!important;line-height:1.75}
+main small,.muted{color:#aeb9c8!important}
+main a{color:#67efff!important}
+main a:hover{color:#b9f8ff!important}
+main section,.page,.content,.card,.panel,.contactCard,.aboutCard{color:#d9e1ec!important}
+main input,main textarea,main select{background:#0b1119!important;color:#f8fafc!important;border:1px solid #3a4858!important}
+main input::placeholder,main textarea::placeholder{color:#9eabba!important}
+main button{color:#071018}
+footer{color:#b9c3d0!important}
+footer b{color:#fff!important}
