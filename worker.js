@@ -1,0 +1,3 @@
+const JSON_HEADERS={"content-type":"application/json; charset=utf-8","cache-control":"no-store"};
+const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:JSON_HEADERS});
+export default{async fetch(request,env){const url=new URL(request.url);if(!url.pathname.startsWith('/api/'))return env.ASSETS.fetch(request);if(url.pathname==='/api/health')return json({ok:true,service:'pcdealfinder',database:!!env.DB});if(url.pathname==='/api/db-test'){if(!env.DB)return json({ok:false,error:'D1 binding missing'},503);const r=await env.DB.prepare('SELECT name FROM sqlite_master WHERE type = ? ORDER BY name').bind('table').all();return json({ok:true,tables:r.results.map(x=>x.name)});}return json({ok:false,error:'Not found'},404)}};
