@@ -1,0 +1,14 @@
+/* PCDealFinder — homepage heading visibility fix */
+.homeHero h1,
+.homeHero h1 span{
+  opacity:1!important;
+  visibility:visible!important;
+}
+.homeHero h1 span{
+  display:inline!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  background:linear-gradient(90deg,#00e5ff,#fff 48%,#a78bfa)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+}
