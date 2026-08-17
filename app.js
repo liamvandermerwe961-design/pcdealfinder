@@ -12,32 +12,30 @@ const AI_WORKER_URL =
    MONEY
 ========================================================= */
 
-const money = n =>
-  'R' + Number(n || 0).toLocaleString('en-ZA');
+function money(n) {
+  return 'R' + Number(n || 0).toLocaleString('en-ZA');
+}
 
 
 /* =========================================================
-   LOAD PRODUCT DATA
+   LOAD PRODUCTS
 ========================================================= */
 
 fetch('data.json')
-  .then(r => {
-    if (!r.ok) {
+  .then(response => {
+    if (!response.ok) {
       throw new Error('Could not load data.json');
     }
 
-    return r.json();
+    return response.json();
   })
   .then(data => {
-
     products = Array.isArray(data) ? data : [];
-
     render(products);
-
   })
   .catch(error => {
 
-    console.error('PCDealFinder data error:', error);
+    console.error('DATA ERROR:', error);
 
     const box = document.getElementById('results');
 
@@ -46,7 +44,7 @@ fetch('data.json')
         <div class="emptyState">
           <div class="emptyIcon">⚠</div>
           <h3>Product data could not be loaded</h3>
-          <p>Please check that data.json is in the same folder as the website.</p>
+          <p>Please check that data.json is available.</p>
         </div>
       `;
     }
@@ -130,14 +128,12 @@ function search(query) {
         .join(' ')
         .toLowerCase();
 
-
       return searchable.includes(value);
 
     });
 
 
   render(results);
-
 
   document
     .getElementById('compare')
@@ -165,7 +161,6 @@ function bestOffer(product) {
 
   }
 
-
   return [...product.offers]
     .sort(
       (a, b) =>
@@ -184,18 +179,8 @@ function productPrice(product) {
 }
 
 
-function withOffer(product) {
-
-  return {
-    ...product,
-    bestOffer: bestOffer(product)
-  };
-
-}
-
-
 /* =========================================================
-   PRODUCT RENDERING
+   PRODUCT RENDER
 ========================================================= */
 
 function render(list) {
@@ -210,7 +195,6 @@ function render(list) {
 
   const count =
     document.getElementById('count');
-
 
   if (count) {
 
@@ -250,14 +234,14 @@ function render(list) {
   }
 
 
-  list.forEach(p => {
+  list.forEach(product => {
 
     const offers =
-      [...(p.offers || [])]
+      [...(product.offers || [])]
         .filter(
-          o =>
+          offer =>
             Number.isFinite(
-              Number(o.price)
+              Number(offer.price)
             )
         )
         .sort(
@@ -270,34 +254,29 @@ function render(list) {
     if (!offers.length) return;
 
 
-    const best = offers[0];
-
-    const low =
-      Number(best.price);
+    const lowest =
+      Number(offers[0].price);
 
 
-    const high =
+    const highest =
       Number(
-        offers[
-          offers.length - 1
-        ].price
+        offers[offers.length - 1].price
       );
 
 
     const savings =
-      high > low
-        ? high - low
+      highest > lowest
+        ? highest - lowest
         : 0;
 
 
-    const el =
+    const element =
       document.createElement('article');
 
+    element.className = 'product';
 
-    el.className = 'product';
 
-
-    el.innerHTML = `
+    element.innerHTML = `
 
       <div class="productVisual">
 
@@ -306,7 +285,7 @@ function render(list) {
         <div class="productPlaceholder">
 
           <span>
-            ${getProductIcon(p.category)}
+            ${getProductIcon(product.category)}
           </span>
 
         </div>
@@ -325,18 +304,18 @@ function render(list) {
           <div class="productInfo">
 
             <div class="tag">
-              ${p.category || 'PRODUCT'}
+              ${product.category || 'PRODUCT'}
             </div>
 
             <h3>
-              ${p.name || 'Unnamed product'}
+              ${product.name || 'Unnamed product'}
             </h3>
 
             ${
-              p.mpn
+              product.mpn
                 ? `
                   <div class="mpn">
-                    MPN: ${p.mpn}
+                    MPN: ${product.mpn}
                   </div>
                 `
                 : ''
@@ -352,22 +331,16 @@ function render(list) {
             </small>
 
             <strong>
-              ${money(low)}
+              ${money(lowest)}
             </strong>
 
-            ${
-              savings > 0
-                ? `
-                  <span>
-                    Save ${money(savings)}
-                  </span>
-                `
-                : `
-                  <span>
-                    Best listed price
-                  </span>
-                `
-            }
+            <span>
+              ${
+                savings > 0
+                  ? `Save ${money(savings)}`
+                  : 'Best listed price'
+              }
+            </span>
 
           </div>
 
@@ -377,11 +350,11 @@ function render(list) {
         <div class="productSpecs">
 
           ${
-            p.socket
+            product.socket
               ? `
                 <div>
                   <small>SOCKET</small>
-                  <b>${p.socket}</b>
+                  <b>${product.socket}</b>
                 </div>
               `
               : ''
@@ -389,11 +362,11 @@ function render(list) {
 
 
           ${
-            p.memory
+            product.memory
               ? `
                 <div>
                   <small>MEMORY</small>
-                  <b>${p.memory}</b>
+                  <b>${product.memory}</b>
                 </div>
               `
               : ''
@@ -401,11 +374,11 @@ function render(list) {
 
 
           ${
-            p.capacity
+            product.capacity
               ? `
                 <div>
                   <small>CAPACITY</small>
-                  <b>${p.capacity}GB</b>
+                  <b>${product.capacity}GB</b>
                 </div>
               `
               : ''
@@ -413,11 +386,11 @@ function render(list) {
 
 
           ${
-            p.wattage
+            product.wattage
               ? `
                 <div>
                   <small>POWER</small>
-                  <b>${p.wattage}W</b>
+                  <b>${product.wattage}W</b>
                 </div>
               `
               : ''
@@ -425,11 +398,11 @@ function render(list) {
 
 
           ${
-            p.tier
+            product.tier
               ? `
                 <div>
                   <small>PERFORMANCE</small>
-                  <b>${capitalize(p.tier)}</b>
+                  <b>${capitalize(product.tier)}</b>
                 </div>
               `
               : ''
@@ -446,9 +419,7 @@ function render(list) {
 
           <span>
             ${offers.length}
-            ${offers.length === 1
-              ? 'offer'
-              : 'offers'}
+            ${offers.length === 1 ? 'offer' : 'offers'}
           </span>
 
         </div>
@@ -456,27 +427,25 @@ function render(list) {
 
         <div class="offers">
 
-          ${offers.map((o, i) => `
+          ${offers.map((offer, index) => `
 
             <div class="offer">
 
               <div class="retailerInfo">
 
                 <div class="retailerLogo">
-                  ${getRetailerInitial(
-                    o.retailer
-                  )}
+                  ${getRetailerInitial(offer.retailer)}
                 </div>
 
                 <div>
 
                   <b>
-                    ${o.retailer || 'Retailer'}
+                    ${offer.retailer || 'Retailer'}
                   </b>
 
                   <small>
                     <span class="stockDot"></span>
-                    ${o.stock || 'Stock unknown'}
+                    ${offer.stock || 'Stock unknown'}
                   </small>
 
                 </div>
@@ -487,11 +456,11 @@ function render(list) {
               <div class="offerRight">
 
                 <div class="offerPrice">
-                  ${money(o.price)}
+                  ${money(offer.price)}
                 </div>
 
                 ${
-                  i === 0
+                  index === 0
                     ? `
                       <span class="lowestLabel">
                         LOWEST
@@ -500,13 +469,12 @@ function render(list) {
                     : ''
                 }
 
-
                 ${
-                  o.url
+                  offer.url
                     ? `
                       <a
                         class="dealButton"
-                        href="${o.url}"
+                        href="${offer.url}"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -542,7 +510,7 @@ function render(list) {
     `;
 
 
-    box.appendChild(el);
+    box.appendChild(element);
 
   });
 
@@ -550,88 +518,29 @@ function render(list) {
 
 
 /* =========================================================
-   PC BUILDER
+   NORMAL PC BUILDER
 ========================================================= */
 
 function generateBuild() {
 
   const budget =
     Number(
-      document.getElementById(
-        'buildBudget'
-      )?.value || 15000
+      document.getElementById('buildBudget')?.value || 15000
     );
-
 
   const game =
-    document.getElementById(
-      'buildGame'
-    )?.value || 'general';
-
+    document.getElementById('buildGame')?.value || 'general';
 
   const resolution =
-    document.getElementById(
-      'buildResolution'
-    )?.value || '1080p';
-
+    document.getElementById('buildResolution')?.value || '1080p';
 
   const priority =
-    document.getElementById(
-      'buildPriority'
-    )?.value || 'value';
-
+    document.getElementById('buildPriority')?.value || 'value';
 
   const result =
-    document.getElementById(
-      'buildResult'
-    );
-
+    document.getElementById('buildResult');
 
   if (!result) return;
-
-
-  result.innerHTML = `
-
-    <div class="buildResultHead">
-
-      <div>
-
-        <small>
-          PCDEALFINDER RECOMMENDATION
-        </small>
-
-        <h3>
-          Building your ${resolution} gaming PC
-        </h3>
-
-      </div>
-
-      <div class="buildTotal">
-
-        <small>
-          TARGET BUDGET
-        </small>
-
-        <strong>
-          ${money(budget)}
-        </strong>
-
-      </div>
-
-    </div>
-
-    <div class="buildParts">
-
-      <div class="buildPart">
-        <div>
-          <small>STATUS</small>
-          <b>Analysing catalogue...</b>
-        </div>
-      </div>
-
-    </div>
-
-  `;
 
 
   const build =
@@ -645,13 +554,14 @@ function generateBuild() {
 
   if (!build) {
 
-    result.innerHTML += `
-
-      <p class="muted">
-        We couldn't create a compatible build
-        from the current catalogue.
-      </p>
-
+    result.innerHTML = `
+      <div class="aiAnswer">
+        <strong>⚠️ Build unavailable</strong>
+        <p>
+          We couldn't create a compatible build
+          from the current catalogue.
+        </p>
+      </div>
     `;
 
     return;
@@ -717,11 +627,7 @@ function generateBuild() {
           </div>
 
           <strong>
-            ${money(
-              productPrice(
-                part.product
-              )
-            )}
+            ${money(productPrice(part.product))}
           </strong>
 
         </div>
@@ -772,39 +678,22 @@ function createBuild(
 ) {
 
   const cpus =
-    products.filter(
-      p => p.category === 'CPU'
-    );
-
+    products.filter(p => p.category === 'CPU');
 
   const gpus =
-    products.filter(
-      p => p.category === 'GPU'
-    );
-
+    products.filter(p => p.category === 'GPU');
 
   const rams =
-    products.filter(
-      p => p.category === 'RAM'
-    );
-
+    products.filter(p => p.category === 'RAM');
 
   const ssds =
-    products.filter(
-      p => p.category === 'SSD'
-    );
-
+    products.filter(p => p.category === 'SSD');
 
   const motherboards =
-    products.filter(
-      p => p.category === 'Motherboard'
-    );
-
+    products.filter(p => p.category === 'Motherboard');
 
   const psus =
-    products.filter(
-      p => p.category === 'PSU'
-    );
+    products.filter(p => p.category === 'PSU');
 
 
   if (
@@ -846,150 +735,80 @@ function createBuild(
 
 
   const weight =
-    gpuWeights[
-      resolution
-    ] || gpuWeights['1080p'];
+    gpuWeights[resolution] ||
+    gpuWeights['1080p'];
 
 
-  let gpuCandidates =
-    [...gpus]
-      .sort(
-        (a, b) =>
-          scoreGPU(
-            b,
-            weight,
-            priority
-          ) -
-          scoreGPU(
-            a,
-            weight,
-            priority
-          )
+  const gpuCandidates =
+    [...gpus].sort(
+      (a, b) =>
+        scoreGPU(b, weight, priority) -
+        scoreGPU(a, weight, priority)
+    );
+
+
+  for (const gpu of gpuCandidates) {
+
+    const cpuCandidates =
+      cpus.filter(
+        cpu =>
+          !gpu.socket ||
+          !cpu.socket ||
+          cpu.socket === gpu.socket
       );
 
 
-  let selectedGPU =
-    gpuCandidates[0];
+    if (!cpuCandidates.length) continue;
 
 
-  if (!selectedGPU) return null;
+    const cpu =
+      chooseCPU(
+        cpuCandidates,
+        priority
+      );
 
 
-  const cpuCandidates =
-    cpus.filter(
-      cpu =>
-        cpu.socket ===
-        selectedGPU.socket ||
-        !selectedGPU.socket
-    );
+    if (!cpu) continue;
 
 
-  const selectedCPU =
-    chooseCPU(
-      cpuCandidates,
-      priority
-    );
+    const ram =
+      chooseRAM(
+        rams,
+        cpu
+      );
 
 
-  const selectedRAM =
-    chooseRAM(
-      rams,
-      selectedCPU
-    );
+    if (!ram) continue;
 
 
-  const selectedMB =
-    chooseMotherboard(
-      motherboards,
-      selectedCPU,
-      selectedRAM
-    );
+    const motherboard =
+      chooseMotherboard(
+        motherboards,
+        cpu,
+        ram
+      );
 
 
-  const selectedSSD =
-    chooseSSD(
-      ssds,
-      budget
-    );
+    if (!motherboard) continue;
 
 
-  const requiredWattage =
-    Number(
-      selectedGPU.wattage || 0
-    ) + 250;
+    const ssd =
+      chooseSSD(ssds);
 
 
-  const selectedPSU =
-    psus
-      .filter(
-        p =>
-          Number(
-            p.wattage || 0
-          ) >= requiredWattage
-      )
-      .sort(
-        (a, b) =>
-          productPrice(a) -
-          productPrice(b)
-      )[0] ||
-    psus[0];
+    if (!ssd) continue;
 
 
-  const parts = [
-
-    {
-      category: 'CPU',
-      product: selectedCPU
-    },
-
-    {
-      category: 'GPU',
-      product: selectedGPU
-    },
-
-    {
-      category: 'RAM',
-      product: selectedRAM
-    },
-
-    {
-      category: 'Motherboard',
-      product: selectedMB
-    },
-
-    {
-      category: 'SSD',
-      product: selectedSSD
-    },
-
-    {
-      category: 'PSU',
-      product: selectedPSU
-    }
-
-  ];
+    const requiredWattage =
+      Number(gpu.wattage || 0) + 250;
 
 
-  let total =
-    parts.reduce(
-      (sum, part) =>
-        sum +
-        productPrice(
-          part.product
-        ),
-      0
-    );
-
-
-  /*
-    If the first build is over budget,
-    downgrade the GPU until it fits.
-  */
-
-  if (total > budget) {
-
-    const cheaperGPUs =
-      [...gpus]
+    const compatiblePSUs =
+      psus
+        .filter(
+          psu =>
+            Number(psu.wattage || 0) >= requiredWattage
+        )
         .sort(
           (a, b) =>
             productPrice(a) -
@@ -997,195 +816,160 @@ function createBuild(
         );
 
 
-    for (
-      const gpu of cheaperGPUs
-    ) {
-
-      const newParts =
-        parts.map(part =>
-          part.category === 'GPU'
-            ? {
-                ...part,
-                product: gpu
-              }
-            : part
-        );
+    if (!compatiblePSUs.length) continue;
 
 
-      const newTotal =
-        newParts.reduce(
-          (sum, part) =>
-            sum +
-            productPrice(
-              part.product
-            ),
-          0
-        );
+    const psu =
+      compatiblePSUs[0];
 
 
-      if (
-        newTotal <= budget
-      ) {
+    const parts = [
 
-        return {
+      {
+        category: 'CPU',
+        product: cpu
+      },
 
-          title:
-            buildTitle(
-              game,
-              resolution,
-              priority
-            ),
+      {
+        category: 'GPU',
+        product: gpu
+      },
 
-          parts:
-            newParts
+      {
+        category: 'RAM',
+        product: ram
+      },
 
-        };
+      {
+        category: 'Motherboard',
+        product: motherboard
+      },
 
+      {
+        category: 'SSD',
+        product: ssd
+      },
+
+      {
+        category: 'PSU',
+        product: psu
       }
+
+    ];
+
+
+    const total =
+      parts.reduce(
+        (sum, part) =>
+          sum + productPrice(part.product),
+        0
+      );
+
+
+    if (total <= budget) {
+
+      return {
+
+        title:
+          buildTitle(
+            game,
+            resolution,
+            priority
+          ),
+
+        parts
+
+      };
 
     }
 
   }
 
 
-  return {
-
-    title:
-      buildTitle(
-        game,
-        resolution,
-        priority
-      ),
-
-    parts
-
-  };
+  return null;
 
 }
 
 
 /* =========================================================
-   BUILDER HELPERS
+   BUILD HELPERS
 ========================================================= */
 
-function scoreGPU(
-  gpu,
-  weight,
-  priority
-) {
+function scoreGPU(gpu, weight, priority) {
 
   const tier =
     gpu.tier || 'entry';
 
-
   const tierScore =
-    Number(
-      weight[tier] || 1
-    );
-
+    Number(weight[tier] || 1);
 
   const price =
-    Math.max(
-      productPrice(gpu),
-      1
-    );
+    Math.max(productPrice(gpu), 1);
 
 
   if (priority === 'fps') {
-
     return tierScore * 10000;
-
   }
 
 
   if (priority === 'balanced') {
-
-    return (
-      tierScore * 10000
-    ) / price;
-
+    return (tierScore * 10000) / price;
   }
 
 
-  return (
-    tierScore * 15000
-  ) / price;
+  return (tierScore * 15000) / price;
 
 }
 
 
-function chooseCPU(
-  cpus,
-  priority
-) {
+function chooseCPU(cpus, priority) {
 
-  if (!cpus.length) {
-    return null;
-  }
+  if (!cpus.length) return null;
 
 
-  return [...cpus]
-    .sort((a, b) => {
+  return [...cpus].sort((a, b) => {
 
-      const priceA =
-        productPrice(a);
-
-      const priceB =
-        productPrice(b);
+    const priceA = productPrice(a);
+    const priceB = productPrice(b);
 
 
-      if (
-        priority === 'fps'
-      ) {
-
-        return (
-          priceB -
-          priceA
-        );
-
-      }
+    if (priority === 'fps') {
+      return priceB - priceA;
+    }
 
 
-      return (
-        priceA -
-        priceB
-      );
+    return priceA - priceB;
 
-    })[0];
+  })[0];
 
 }
 
 
-function chooseRAM(
-  rams,
-  cpu
-) {
+function chooseRAM(rams, cpu) {
 
   const compatible =
     rams.filter(
-      r =>
+      ram =>
         !cpu.memory ||
-        !r.memory ||
-        r.memory === cpu.memory
+        !ram.memory ||
+        ram.memory === cpu.memory
     );
 
 
   return (
+
     compatible
       .filter(
-        r =>
-          Number(
-            r.capacity || 0
-          ) >= 16
+        ram =>
+          Number(ram.capacity || 0) >= 16
       )
       .sort(
         (a, b) =>
           productPrice(a) -
           productPrice(b)
       )[0]
-  ) ||
-  compatible[0] ||
-  rams[0];
+
+  ) || compatible[0] || rams[0];
 
 }
 
@@ -1198,164 +982,83 @@ function chooseMotherboard(
 
   const compatible =
     boards.filter(
-      b =>
+      board =>
 
-        (!cpu.socket ||
-          !b.socket ||
-          b.socket === cpu.socket)
+        (
+          !cpu.socket ||
+          !board.socket ||
+          board.socket === cpu.socket
+        )
 
         &&
 
-        (!ram.memory ||
-          !b.memory ||
-          b.memory === ram.memory)
-
+        (
+          !ram.memory ||
+          !board.memory ||
+          board.memory === ram.memory
+        )
     );
 
 
   return (
+
     compatible
       .sort(
         (a, b) =>
           productPrice(a) -
           productPrice(b)
       )[0]
-  ) ||
-  boards[0];
+
+  ) || null;
 
 }
 
 
-function chooseSSD(
-  ssds,
-  budget
-) {
+function chooseSSD(ssds) {
 
   const preferred =
-    ssds.filter(
-      s =>
-        Number(
-          s.capacity || 0
-        ) >= 1000
-    );
-
-
-  return (
-    preferred
+    ssds
+      .filter(
+        s =>
+          Number(s.capacity || 0) >= 1000
+      )
       .sort(
         (a, b) =>
           productPrice(a) -
           productPrice(b)
-      )[0]
-  ) ||
-  ssds[0];
-
-}
+      );
 
 
-function buildTitle(
-  game,
-  resolution,
-  priority
-) {
-
-  return `
-    ${resolution}
-    ${gameLabel(game)}
-    ${priorityLabel(priority)}
-    Build
-  `.trim();
-
-}
-
-
-function gameLabel(game) {
-
-  const labels = {
-
-    fortnite: 'Fortnite',
-
-    warzone: 'Call of Duty: Warzone',
-
-    gta: 'GTA V',
-
-    cyberpunk: 'Cyberpunk 2077',
-
-    general: 'Gaming'
-
-  };
-
-
-  return (
-    labels[game] ||
-    'Gaming'
-  );
-
-}
-
-
-function priorityLabel(
-  priority
-) {
-
-  const labels = {
-
-    fps: 'Maximum FPS',
-
-    value: 'Best Value',
-
-    balanced: 'Balanced'
-
-  };
-
-
-  return (
-    labels[priority] ||
-    'Best Value'
-  );
+  return preferred[0] || ssds[0];
 
 }
 
 
 /* =========================================================
-   PCDEALFINDER AI
+   AI BUILDER
 ========================================================= */
 
 async function askPCDealFinderAI() {
 
   const result =
-    document.getElementById(
-      'buildResult'
-    );
-
+    document.getElementById('buildResult');
 
   if (!result) return;
 
 
   const budget =
     Number(
-      document.getElementById(
-        'buildBudget'
-      )?.value || 15000
+      document.getElementById('buildBudget')?.value || 15000
     );
 
-
   const game =
-    document.getElementById(
-      'buildGame'
-    )?.value || 'general';
-
+    document.getElementById('buildGame')?.value || 'general';
 
   const resolution =
-    document.getElementById(
-      'buildResolution'
-    )?.value || '1080p';
-
+    document.getElementById('buildResolution')?.value || '1080p';
 
   const priority =
-    document.getElementById(
-      'buildPriority'
-    )?.value || 'value';
+    document.getElementById('buildPriority')?.value || 'value';
 
 
   result.innerHTML = `
@@ -1384,58 +1087,85 @@ async function askPCDealFinderAI() {
 
   try {
 
+    console.log(
+      'PCDealFinder AI → sending request'
+    );
+
+
     const response =
       await fetch(
         AI_WORKER_URL,
         {
-
           method: 'POST',
 
           headers: {
-            'Content-Type':
-              'application/json'
+            'Content-Type': 'application/json'
           },
 
-          body:
-            JSON.stringify({
-
-              budget,
-              game,
-              resolution,
-              priority,
-
-              products
-
-            })
-
+          body: JSON.stringify({
+            budget,
+            game,
+            resolution,
+            priority,
+            products
+          })
         }
       );
+
+
+    const rawText =
+      await response.text();
+
+
+    console.log(
+      'PCDealFinder AI ← status:',
+      response.status
+    );
+
+    console.log(
+      'PCDealFinder AI ← response:',
+      rawText
+    );
+
+
+    let data;
+
+    try {
+      data = JSON.parse(rawText);
+    }
+
+    catch {
+      throw new Error(
+        `Worker returned non-JSON response: ${rawText.slice(0, 300)}`
+      );
+    }
 
 
     if (!response.ok) {
 
       throw new Error(
-        `AI Worker returned ${response.status}`
+        data.details ||
+        data.error ||
+        `Worker returned HTTP ${response.status}`
       );
 
     }
 
 
-    const data =
-      await response.json();
-
-
-    const answer =
-      data.answer ||
-      data.message ||
-      data.response ||
-      data.text;
-
-
-    if (!answer) {
+    if (!data.ok) {
 
       throw new Error(
-        'AI Worker returned no answer'
+        data.error ||
+        'AI Worker returned an error.'
+      );
+
+    }
+
+
+    if (!data.answer) {
+
+      throw new Error(
+        'AI Worker returned no answer.'
       );
 
     }
@@ -1450,7 +1180,7 @@ async function askPCDealFinderAI() {
         </strong>
 
         <div>
-          ${formatAIAnswer(answer)}
+          ${formatAIAnswer(data.answer)}
         </div>
 
       </div>
@@ -1462,7 +1192,7 @@ async function askPCDealFinderAI() {
   catch (error) {
 
     console.error(
-      'PCDealFinder AI error:',
+      'PCDealFinder AI ERROR:',
       error
     );
 
@@ -1472,16 +1202,15 @@ async function askPCDealFinderAI() {
       <div class="aiAnswer">
 
         <strong>
-          ⚠️ AI unavailable
+          ⚠️ AI ERROR
         </strong>
 
         <p>
-          The PCDealFinder AI Worker could not
-          be reached.
+          ${escapeHTML(error.message)}
         </p>
 
         <p class="muted">
-          Your normal PC Builder still works.
+          The normal PC Builder is still available.
         </p>
 
       </div>
@@ -1494,16 +1223,26 @@ async function askPCDealFinderAI() {
 
 
 /* =========================================================
-   AI TEXT FORMATTER
+   AI FORMATTER
 ========================================================= */
 
 function formatAIAnswer(text) {
 
-  return String(text)
+  return escapeHTML(String(text))
 
     .replace(
       /\*\*(.*?)\*\*/g,
       '<strong>$1</strong>'
+    )
+
+    .replace(
+      /^### (.*?)$/gm,
+      '<h4>$1</h4>'
+    )
+
+    .replace(
+      /^## (.*?)$/gm,
+      '<h3>$1</h3>'
     )
 
     .replace(
@@ -1520,7 +1259,67 @@ function formatAIAnswer(text) {
 
 
 /* =========================================================
-   MISC HELPERS
+   LABELS
+========================================================= */
+
+function gameLabel(game) {
+
+  const labels = {
+
+    fortnite: 'Fortnite',
+
+    warzone: 'Call of Duty: Warzone',
+
+    gta: 'GTA V',
+
+    cyberpunk: 'Cyberpunk 2077',
+
+    general: 'Gaming'
+
+  };
+
+
+  return labels[game] || 'Gaming';
+
+}
+
+
+function priorityLabel(priority) {
+
+  const labels = {
+
+    fps: 'Maximum FPS',
+
+    value: 'Best Value',
+
+    balanced: 'Balanced'
+
+  };
+
+
+  return labels[priority] || 'Best Value';
+
+}
+
+
+function buildTitle(
+  game,
+  resolution,
+  priority
+) {
+
+  return `
+    ${resolution}
+    ${gameLabel(game)}
+    ${priorityLabel(priority)}
+    Build
+  `.trim();
+
+}
+
+
+/* =========================================================
+   MISC
 ========================================================= */
 
 function capitalize(value) {
@@ -1535,9 +1334,7 @@ function capitalize(value) {
 }
 
 
-function getRetailerInitial(
-  retailer
-) {
+function getRetailerInitial(retailer) {
 
   if (!retailer) return 'R';
 
@@ -1549,9 +1346,7 @@ function getRetailerInitial(
 }
 
 
-function getProductIcon(
-  category
-) {
+function getProductIcon(category) {
 
   const icons = {
 
@@ -1570,9 +1365,18 @@ function getProductIcon(
   };
 
 
-  return (
-    icons[category] ||
-    '🖥️'
-  );
+  return icons[category] || '🖥️';
+
+}
+
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 
 }
