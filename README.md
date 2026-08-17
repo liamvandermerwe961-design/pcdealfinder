@@ -1,10 +1,4 @@
-# PCDealFinder MVP
+# PCDealFinder V2
+Polished static MVP for the South African PC hardware comparison concept.
 
-Static prototype for a South African PC component price-comparison product.
-
-Includes search, categories, retailer comparison cards, deal links and a placeholder PC builder.
-
-Important: this prototype does NOT have live retailer feeds or approved affiliate tracking. Prices/data are curated sample values and must be verified before publication. Do not automate retailer data collection without checking terms and obtaining permission where required.
-
-Run locally with: python -m http.server 8000
-Then open http://localhost:8000
+The current product data is curated prototype data, not a live price feed. Retailer permissions, approved data feeds, product matching and affiliate tracking must be established before presenting listings as real-time or monetized.
