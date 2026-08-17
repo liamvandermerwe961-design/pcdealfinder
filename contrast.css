@@ -1,0 +1,100 @@
+/* =========================================================
+   PCDEALFINDER — READABILITY LAYER
+   Keeps the dark gamer aesthetic while increasing text contrast.
+========================================================= */
+
+:root {
+  --text: #f8fafc;
+  --text-soft: #e2e8f0;
+  --muted: #a8b3c2;
+}
+
+body {
+  color: #f8fafc;
+}
+
+.nav nav a,
+.hero p,
+.quick button,
+.section p,
+.builderIntro p,
+.productContent,
+.note span,
+footer span,
+footer a {
+  color: #d9e1eb;
+}
+
+.nav nav a:hover,
+footer a:hover {
+  color: var(--cyan);
+}
+
+.quick > span,
+.mpn,
+.bestPrice small,
+.productSpecs small,
+.muted {
+  color: #a8b3c2 !important;
+}
+
+.searchWrap input {
+  color: #f8fafc;
+}
+
+.searchWrap input::placeholder {
+  color: #9aa7b6;
+  opacity: 1;
+}
+
+.quick button {
+  color: #d9e1eb;
+}
+
+.section h2,
+.hero h1,
+.product h3,
+.bestPrice strong,
+.builderIntro h2,
+footer b {
+  color: #f8fafc;
+}
+
+.productSpecs b,
+.cats b,
+.cats span,
+.builderForm label,
+.builderForm label span,
+.builderForm select,
+.note b {
+  color: #e6edf5;
+}
+
+.builderForm select,
+.builderForm input {
+  background-color: #0b1118;
+  color: #f1f5f9;
+}
+
+.builderForm option {
+  background: #0b1118;
+  color: #f1f5f9;
+}
+
+/* Slightly stronger weight improves readability without changing the look. */
+.nav nav a,
+.quick button,
+.productSpecs b,
+.cats b,
+.builderForm label,
+.note b {
+  font-weight: 700;
+}
+
+/* Keep secondary copy comfortably readable against the dark surfaces. */
+.hero p,
+.builderIntro p,
+.note span,
+footer span {
+  line-height: 1.7;
+}
