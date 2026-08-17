@@ -12,7 +12,9 @@ async function initDb(db){await db.batch([db.prepare("CREATE TABLE IF NOT EXISTS
 async function currentUser(request,db){const sid=sessionId(request);if(!sid)return null;const now=Math.floor(Date.now()/1000);return await db.prepare('SELECT u.id,u.email,u.display_name FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.id=? AND s.expires_at>?').bind(sid,now).first()}
 async function body(request){try{return await request.json()}catch{return {}}}
 async function catalogue(env,force=false){let live=await getLiveCatalogue(env.DB);if(force||live.length<25){await refreshLiveCatalogue(env.DB);live=await getLiveCatalogue(env.DB)}return live}
-const worker={async fetch(request,env){const url=new URL(request.url);if(!url.pathname.startsWith('/api/'))return env.ASSETS.fetch(request);if(!env.DB)return json({ok:false,error:'D1 binding missing'},503);try{await initDb(env.DB);
+const worker={async fetch(request,env){const url=new URL(request.url);
+if(url.pathname==='/data.json'&&request.method==='GET'){if(!env.DB)return json({ok:false,error:'D1 binding missing'},503);try{await initDb(env.DB);return json(await catalogue(env,false));}catch(error){console.error('LIVE DATA ERROR',error);return json({ok:false,error:'Live catalogue unavailable'},503)}}
+if(!url.pathname.startsWith('/api/'))return env.ASSETS.fetch(request);if(!env.DB)return json({ok:false,error:'D1 binding missing'},503);try{await initDb(env.DB);
 if(url.pathname==='/api/health')return json({ok:true,service:'pcdealfinder',database:true,catalogue:'live'});
 if(url.pathname==='/api/db-test'){const r=await env.DB.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all();return json({ok:true,tables:r.results.map(x=>x.name)});}
 if(url.pathname==='/api/db-schema'){const r=await env.DB.prepare("SELECT name,sql FROM sqlite_master WHERE type='table' ORDER BY name").all();const info={};for(const t of r.results){const cols=await env.DB.prepare(`PRAGMA table_info(${t.name})`).all();info[t.name]={sql:t.sql,columns:cols.results}}return json({ok:true,schema:info});}
