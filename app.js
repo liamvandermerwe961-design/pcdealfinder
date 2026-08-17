@@ -1,262 +1,726 @@
 let products = [];
 
-const money = n => 'R' + Number(n).toLocaleString('en-ZA');
+/* =========================================================
+   MONEY
+========================================================= */
+
+const money = n =>
+  'R' + Number(n || 0).toLocaleString('en-ZA');
+
+
+/* =========================================================
+   LOAD PRODUCT DATA
+========================================================= */
 
 fetch('data.json')
-  .then(r => r.json())
-  .then(d => {
-    products = d;
-    render(d);
+  .then(r => {
+    if (!r.ok) {
+      throw new Error('Could not load data.json');
+    }
+
+    return r.json();
+  })
+  .then(data => {
+    products = Array.isArray(data) ? data : [];
+
+    render(products);
+  })
+  .catch(error => {
+    console.error('PCDealFinder data error:', error);
+
+    const box = document.getElementById('results');
+
+    if (box) {
+      box.innerHTML = `
+        <p class="muted">
+          Product data could not be loaded.
+        </p>
+      `;
+    }
   });
 
+
+/* =========================================================
+   PRODUCT HELPERS
+========================================================= */
+
 function bestOffer(product) {
-  return [...product.offers].sort((a, b) => a.price - b.price)[0];
+
+  if (!product.offers || !product.offers.length) {
+    return {
+      price: Infinity,
+      retailer: 'Unavailable',
+      stock: 'Unknown',
+      url: '#'
+    };
+  }
+
+  return [...product.offers]
+    .sort((a, b) => Number(a.price) - Number(b.price))[0];
 }
 
+
+function productPrice(product) {
+  return Number(bestOffer(product).price);
+}
+
+
+function withOffer(product) {
+  return {
+    ...product,
+    bestOffer: bestOffer(product)
+  };
+}
+
+
+/* =========================================================
+   PRODUCT SEARCH / RESULTS
+========================================================= */
+
 function render(list) {
+
   const box = document.getElementById('results');
+
+  if (!box) return;
+
   box.innerHTML = '';
 
-  document.getElementById('count').textContent =
-    list.length + ' product' + (list.length === 1 ? '' : 's');
+  const count = document.getElementById('count');
+
+  if (count) {
+    count.textContent =
+      list.length +
+      ' product' +
+      (list.length === 1 ? '' : 's');
+  }
+
+  if (!list.length) {
+
+    box.innerHTML = `
+      <p class="muted">
+        No products found.
+      </p>
+    `;
+
+    return;
+  }
+
 
   list.forEach(p => {
-    const offers = [...p.offers].sort((a, b) => a.price - b.price);
-    const low = offers[0].price;
-    const high = offers.at(-1).price;
+
+    const offers = [...(p.offers || [])]
+      .sort((a, b) => Number(a.price) - Number(b.price));
+
+    if (!offers.length) return;
+
+    const low = Number(offers[0].price);
+    const high = Number(offers[offers.length - 1].price);
 
     const el = document.createElement('article');
+
     el.className = 'product';
 
     el.innerHTML = `
       <div class="productHead">
+
         <div>
-          <div class="tag">${p.category}</div>
-          <h3>${p.name}</h3>
-          <div class="mpn">${p.mpn}</div>
+
+          <div class="tag">
+            ${p.category || 'PRODUCT'}
+          </div>
+
+          <h3>
+            ${p.name || 'Unnamed product'}
+          </h3>
+
+          <div class="mpn">
+            ${p.mpn || ''}
+          </div>
+
         </div>
+
 
         <div class="best">
-          <small>BEST LISTED PRICE</small>
-          <strong>${money(low)}</strong>
+
+          <small>
+            BEST LISTED PRICE
+          </small>
+
+          <strong>
+            ${money(low)}
+          </strong>
+
           <div class="save">
-            ${high > low
-              ? 'Save ' + money(high - low) + ' vs highest listing'
-              : 'Lowest listed offer'}
+
+            ${
+              high > low
+                ? 'Save ' +
+                  money(high - low) +
+                  ' vs highest listing'
+                : 'Lowest listed offer'
+            }
+
           </div>
+
         </div>
+
       </div>
 
+
       <div class="offers">
+
         ${offers.map((o, i) => `
+
           <div class="offer">
-            <div>
-              <b>${i === 0 ? '🏆 ' : ''}${o.retailer}</b>
-              <small>● ${o.stock}</small>
-            </div>
 
             <div>
-              <div class="price">${money(o.price)}</div>
-              <a href="${o.url}" target="_blank" rel="noopener">
-                View deal
-              </a>
+
+              <b>
+                ${i === 0 ? '🏆 ' : ''}
+                ${o.retailer || 'Retailer'}
+              </b>
+
+              <small>
+                ● ${o.stock || 'Stock unknown'}
+              </small>
+
             </div>
+
+
+            <div>
+
+              <div class="price">
+                ${money(o.price)}
+              </div>
+
+              ${
+                o.url
+                  ? `
+                    <a
+                      href="${o.url}"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      View deal
+                    </a>
+                  `
+                  : ''
+              }
+
+            </div>
+
           </div>
+
         `).join('')}
+
       </div>
     `;
 
     box.appendChild(el);
+
   });
 }
 
-function search(q) {
-  document.getElementById('q').value = q;
 
-  const x = (q || '').toLowerCase();
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function search(q) {
+
+  const input = document.getElementById('q');
+
+  if (input) {
+    input.value = q;
+  }
+
+  const x = (q || '').trim().toLowerCase();
 
   const filtered = x
-    ? products.filter(p =>
-        (p.name + ' ' + p.category + ' ' + p.mpn)
-          .toLowerCase()
-          .includes(x)
-      )
+    ? products.filter(p => {
+
+        const searchable = [
+          p.name,
+          p.category,
+          p.mpn,
+          p.socket,
+          p.memory,
+          p.capacity
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+
+        return searchable.includes(x);
+
+      })
     : products;
+
 
   render(filtered);
 
-  document.getElementById('compare')
-    .scrollIntoView({ behavior: 'smooth' });
+
+  const compare = document.getElementById('compare');
+
+  if (compare) {
+
+    compare.scrollIntoView({
+      behavior: 'smooth'
+    });
+
+  }
 }
+
 
 function runSearch() {
-  search(document.getElementById('q').value);
+
+  const input = document.getElementById('q');
+
+  search(input ? input.value : '');
+
 }
 
+
 function focusSearch() {
-  document.getElementById('q').focus();
+
+  const input = document.getElementById('q');
+
+  if (input) {
+    input.focus();
+  }
+
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
+
 }
 
-document.getElementById('q').addEventListener('keydown', e => {
-  if (e.key === 'Enter') runSearch();
-});
+
+const searchInput = document.getElementById('q');
+
+if (searchInput) {
+
+  searchInput.addEventListener(
+    'keydown',
+    e => {
+
+      if (e.key === 'Enter') {
+        runSearch();
+      }
+
+    }
+  );
+
+}
 
 
-/* =========================
+/* =========================================================
    PC BUILDER
-========================= */
+========================================================= */
 
 function generateBuild() {
 
-  const budget = Number(
-    document.getElementById('buildBudget').value
-  );
+  const budgetInput =
+    document.getElementById('buildBudget');
 
-  const game =
-    document.getElementById('buildGame').value;
+  const gameInput =
+    document.getElementById('buildGame');
 
-  const resolution =
-    document.getElementById('buildResolution').value;
+  const resolutionInput =
+    document.getElementById('buildResolution');
 
-  const priority =
-    document.getElementById('buildPriority').value;
+  const priorityInput =
+    document.getElementById('buildPriority');
 
   const result =
     document.getElementById('buildResult');
 
 
-  if (!budget || budget <= 0) {
-    result.innerHTML = `
-      <p class="muted">
-        Please enter a valid budget first.
-      </p>
-    `;
+  if (!result) {
+    console.error('buildResult element not found.');
     return;
   }
 
 
-  const cpus = products
-    .filter(p => p.category === 'CPU')
-    .map(p => ({
-      ...p,
-      bestOffer: bestOffer(p)
-    }));
+  const budget =
+    Number(budgetInput?.value || 0);
 
-  const gpus = products
-    .filter(p => p.category === 'GPU')
-    .map(p => ({
-      ...p,
-      bestOffer: bestOffer(p)
-    }));
+  const game =
+    gameInput?.value || 'general';
 
-  const rams = products
-    .filter(p =>
-      p.category === 'RAM' &&
-      p.memory === 'DDR4' &&
-      p.capacity >= 16
-    )
-    .map(p => ({
-      ...p,
-      bestOffer: bestOffer(p)
-    }));
+  const resolution =
+    resolutionInput?.value || '1080p';
 
-  const ssds = products
-    .filter(p =>
-      p.category === 'SSD' &&
-      p.capacity >= 500
-    )
-    .map(p => ({
-      ...p,
-      bestOffer: bestOffer(p)
-    }));
-
-  const boards = products
-    .filter(p =>
-      p.category === 'Motherboard' &&
-      p.socket === 'AM4' &&
-      p.memory === 'DDR4'
-    )
-    .map(p => ({
-      ...p,
-      bestOffer: bestOffer(p)
-    }));
-
-  const psus = products
-    .filter(p => p.category === 'PSU')
-    .map(p => ({
-      ...p,
-      bestOffer: bestOffer(p)
-    }));
+  const priority =
+    priorityInput?.value || 'balanced';
 
 
-  const gameNames = {
-    fortnite: 'Fortnite',
-    warzone: 'Call of Duty: Warzone',
-    gta: 'GTA V',
-    cyberpunk: 'Cyberpunk 2077',
-    general: 'General gaming'
-  };
+  /* =====================================================
+     VALIDATE BUDGET
+  ===================================================== */
 
+  if (!budget || budget <= 0) {
 
-  /*
-    GPU performance ranking.
+    result.innerHTML = `
+      <div class="buildResultHead">
 
-    This is deliberately simple for the prototype.
-    Later we can replace this with real benchmark data.
-  */
+        <div>
 
-  const gpuScore = {
-    entry: 1,
-    mid: 2,
-    high: 3,
-    enthusiast: 4
-  };
+          <small>
+            INVALID BUDGET
+          </small>
 
+          <h3>
+            Enter a valid budget
+          </h3>
 
-  const cpuScore = {
-    'AMD Ryzen 5 5500': 1,
-    'AMD Ryzen 5 5600': 2,
-    'AMD Ryzen 7 5700X': 3
-  };
+        </div>
 
+      </div>
 
-  /*
-    Resolution determines how heavily we value the GPU.
-  */
+      <p class="muted">
+        Enter the amount you want to spend on the PC,
+        then try again.
+      </p>
+    `;
 
-  const resolutionWeight = {
-    '1080p': 1,
-    '1440p': 1.25,
-    '4K': 1.55
-  };
+    result.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
 
-
-  /*
-    Minimum PSU requirements.
-  */
-
-  function requiredWattage(gpu) {
-
-    if (gpu.tier === 'enthusiast') return 750;
-    if (gpu.tier === 'high') return 650;
-    if (gpu.tier === 'mid') return 550;
-
-    return 500;
+    return;
   }
 
 
-  /*
-    Build every possible compatible combination.
+  /* =====================================================
+     GAME NAMES
+  ===================================================== */
 
-    With our current catalogue this is small enough
-    to calculate instantly.
-  */
+  const gameNames = {
 
-  let candidates = [];
+    fortnite:
+      'Fortnite',
+
+    warzone:
+      'Call of Duty: Warzone',
+
+    gta:
+      'GTA V',
+
+    cyberpunk:
+      'Cyberpunk 2077',
+
+    general:
+      'General Gaming'
+
+  };
+
+
+  /* =====================================================
+     BUILD COMPONENT DATABASE
+  ===================================================== */
+
+  const cpus = products
+    .filter(p =>
+      p.category === 'CPU'
+    )
+    .map(withOffer)
+    .filter(p =>
+      Number.isFinite(productPrice(p))
+    );
+
+
+  const gpus = products
+    .filter(p =>
+      p.category === 'GPU'
+    )
+    .map(withOffer)
+    .filter(p =>
+      Number.isFinite(productPrice(p))
+    );
+
+
+  const rams = products
+    .filter(p =>
+      p.category === 'RAM'
+    )
+    .map(withOffer)
+    .filter(p =>
+      Number.isFinite(productPrice(p))
+    );
+
+
+  const ssds = products
+    .filter(p =>
+      p.category === 'SSD'
+    )
+    .map(withOffer)
+    .filter(p =>
+      Number.isFinite(productPrice(p))
+    );
+
+
+  const boards = products
+    .filter(p =>
+      p.category === 'Motherboard'
+    )
+    .map(withOffer)
+    .filter(p =>
+      Number.isFinite(productPrice(p))
+    );
+
+
+  const psus = products
+    .filter(p =>
+      p.category === 'PSU'
+    )
+    .map(withOffer)
+    .filter(p =>
+      Number.isFinite(productPrice(p))
+    );
+
+
+  /* =====================================================
+     BASIC CATALOGUE CHECK
+  ===================================================== */
+
+  if (
+    !cpus.length ||
+    !gpus.length ||
+    !rams.length ||
+    !ssds.length ||
+    !boards.length ||
+    !psus.length
+  ) {
+
+    result.innerHTML = `
+
+      <div class="buildResultHead">
+
+        <div>
+
+          <small>
+            BUILD DATA INCOMPLETE
+          </small>
+
+          <h3>
+            More components are needed
+          </h3>
+
+        </div>
+
+      </div>
+
+      <p class="muted">
+        PCDealFinder needs at least one CPU, GPU, RAM,
+        SSD, motherboard and PSU in the catalogue before
+        it can generate a complete build.
+      </p>
+
+    `;
+
+    result.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+    return;
+  }
+
+
+  /* =====================================================
+     PERFORMANCE TIERS
+  ===================================================== */
+
+  const tierScore = {
+
+    entry: 1,
+
+    mid: 2,
+
+    high: 3,
+
+    enthusiast: 4
+
+  };
+
+
+  function getGpuScore(gpu) {
+
+    return tierScore[gpu.tier] || 1;
+
+  }
+
+
+  /* =====================================================
+     CPU PERFORMANCE
+  ===================================================== */
+
+  function getCpuScore(cpu) {
+
+    const name =
+      String(cpu.name || '').toLowerCase();
+
+
+    if (
+      name.includes('ryzen 7') ||
+      name.includes('i7') ||
+      name.includes('i9')
+    ) {
+      return 4;
+    }
+
+
+    if (
+      name.includes('ryzen 5') ||
+      name.includes('i5')
+    ) {
+      return 3;
+    }
+
+
+    if (
+      name.includes('ryzen 3') ||
+      name.includes('i3')
+    ) {
+      return 2;
+    }
+
+
+    return 1;
+
+  }
+
+
+  /* =====================================================
+     RESOLUTION WEIGHTS
+  ===================================================== */
+
+  const resolutionWeight = {
+
+    '1080p': 1,
+
+    '1440p': 1.25,
+
+    '4K': 1.55
+
+  };
+
+
+  const gpuWeight =
+    resolutionWeight[resolution] || 1;
+
+
+  /* =====================================================
+     PSU REQUIREMENTS
+  ===================================================== */
+
+  function requiredWattage(gpu) {
+
+    const tier =
+      getGpuScore(gpu);
+
+
+    if (tier >= 4) return 850;
+
+    if (tier === 3) return 650;
+
+    if (tier === 2) return 550;
+
+    return 500;
+
+  }
+
+
+  /* =====================================================
+     RAM SCORE
+  ===================================================== */
+
+  function getRamScore(ram) {
+
+    const capacity =
+      Number(ram.capacity || 0);
+
+
+    if (capacity >= 32) return 3;
+
+    if (capacity >= 16) return 2;
+
+    return 1;
+
+  }
+
+
+  /* =====================================================
+     SSD SCORE
+  ===================================================== */
+
+  function getSsdScore(ssd) {
+
+    const capacity =
+      Number(ssd.capacity || 0);
+
+
+    if (capacity >= 2000) return 3;
+
+    if (capacity >= 1000) return 2;
+
+    if (capacity >= 500) return 1;
+
+    return 0;
+
+  }
+
+
+  /* =====================================================
+     COMPATIBILITY
+  ===================================================== */
+
+  function compatible(cpu, board, ram) {
+
+    /* CPU socket */
+
+    if (
+      cpu.socket &&
+      board.socket &&
+      cpu.socket !== board.socket
+    ) {
+      return false;
+    }
+
+
+    /* Memory */
+
+    if (
+      cpu.memory &&
+      ram.memory &&
+      cpu.memory !== ram.memory
+    ) {
+      return false;
+    }
+
+
+    if (
+      board.memory &&
+      ram.memory &&
+      board.memory !== ram.memory
+    ) {
+      return false;
+    }
+
+
+    return true;
+
+  }
+
+
+  /* =====================================================
+     BUILD CANDIDATES
+  ===================================================== */
+
+  const candidates = [];
 
 
   for (const cpu of cpus) {
@@ -271,17 +735,26 @@ function generateBuild() {
 
             for (const psu of psus) {
 
-              /*
-                Compatibility checks
-              */
 
-              if (cpu.socket !== board.socket) continue;
+              /* Compatibility */
 
-              if (cpu.memory !== ram.memory) continue;
+              if (
+                !compatible(
+                  cpu,
+                  board,
+                  ram
+                )
+              ) {
+                continue;
+              }
 
-              if (board.memory !== ram.memory) continue;
 
-              if (psu.wattage < requiredWattage(gpu)) {
+              /* PSU */
+
+              if (
+                Number(psu.wattage || 0) <
+                requiredWattage(gpu)
+              ) {
                 continue;
               }
 
@@ -296,103 +769,211 @@ function generateBuild() {
               ];
 
 
-              const total = parts.reduce(
-                (sum, p) => sum + p.bestOffer.price,
-                0
-              );
+              const total =
+                parts.reduce(
+                  (sum, part) =>
+                    sum + productPrice(part),
+                  0
+                );
 
 
-              /*
-                Never recommend a build over budget.
-              */
+              /* Never exceed budget */
 
-              if (total > budget) continue;
-
-
-              const remaining = budget - total;
+              if (total > budget) {
+                continue;
+              }
 
 
-              /*
-                Build quality score.
+              const remaining =
+                budget - total;
 
-                GPU matters most for gaming.
-                CPU matters next.
-                1TB storage gets a small bonus.
-                32GB gets a small bonus.
-              */
+
+              /* =================================================
+                 SCORE
+              ================================================= */
 
               let score = 0;
 
 
+              /*
+                GPU is the most important component
+                for a gaming PC.
+              */
+
               score +=
-                gpuScore[gpu.tier] *
+                getGpuScore(gpu) *
                 1000 *
-                resolutionWeight[resolution];
+                gpuWeight;
+
+
+              /*
+                CPU is second.
+              */
+
+              score +=
+                getCpuScore(cpu) *
+                450;
+
+
+              /*
+                RAM.
+              */
+
+              score +=
+                getRamScore(ram) *
+                100;
+
+
+              /*
+                Storage.
+              */
+
+              score +=
+                getSsdScore(ssd) *
+                60;
+
+
+              /* =================================================
+                 PRIORITY
+              ================================================= */
+
+              if (
+                priority === 'performance'
+              ) {
+
+                score +=
+                  getGpuScore(gpu) *
+                  700;
+
+                score +=
+                  getCpuScore(cpu) *
+                  300;
+
+              }
+
+
+              if (
+                priority === 'balanced'
+              ) {
+
+                score +=
+                  getGpuScore(gpu) *
+                  350;
+
+                score +=
+                  getCpuScore(cpu) *
+                  250;
+
+              }
+
+
+              if (
+                priority === 'value'
+              ) {
+
+                /*
+                  Value builds prefer getting close
+                  to the budget without wasting money.
+                */
+
+                const budgetUse =
+                  total / budget;
+
+
+                score +=
+                  budgetUse * 500;
+
+
+                score -=
+                  remaining * 0.1;
+
+              }
+
+
+              /* =================================================
+                 GAME-SPECIFIC ADJUSTMENTS
+              ================================================= */
+
+              if (
+                game === 'fortnite'
+              ) {
+
+                /*
+                  Fortnite benefits strongly from
+                  GPU + CPU balance.
+                */
+
+                score +=
+                  getCpuScore(cpu) *
+                  150;
+
+              }
+
+
+              if (
+                game === 'warzone'
+              ) {
+
+                score +=
+                  getGpuScore(gpu) *
+                  200;
+
+                score +=
+                  getRamScore(ram) *
+                  80;
+
+              }
+
+
+              if (
+                game === 'cyberpunk'
+              ) {
+
+                score +=
+                  getGpuScore(gpu) *
+                  350;
+
+              }
+
+
+              if (
+                game === 'gta'
+              ) {
+
+                score +=
+                  getGpuScore(gpu) *
+                  180;
+
+              }
+
+
+              /* =================================================
+                 BUDGET EFFICIENCY
+              ================================================= */
+
+              /*
+                Don't automatically choose a build
+                that leaves half the budget unused.
+              */
+
+              const budgetEfficiency =
+                total / budget;
 
 
               score +=
-                (cpuScore[cpu.name] || 1) *
-                500;
-
-
-              if (ssd.capacity >= 1000) {
-                score += 150;
-              }
-
-
-              if (ram.capacity >= 32) {
-                score += 100;
-              }
-
-
-              /*
-                Value builds should not waste money.
-
-                We give a small bonus for getting
-                closer to the user's budget.
-              */
-
-              if (priority === 'value') {
-
-                score += Math.min(
-                  remaining,
-                  1500
-                ) * -0.15;
-
-              }
-
-
-              /*
-                Performance priority favours stronger GPUs.
-              */
-
-              if (priority === 'performance') {
-
-                score +=
-                  gpuScore[gpu.tier] * 500;
-
-              }
-
-
-              /*
-                Balanced sits between the two.
-              */
-
-              if (priority === 'balanced') {
-
-                score +=
-                  gpuScore[gpu.tier] * 250;
-
-                score +=
-                  (cpuScore[cpu.name] || 1) * 150;
-              }
+                budgetEfficiency * 250;
 
 
               candidates.push({
+
                 parts,
+
                 total,
+
                 remaining,
+
                 score
+
               });
 
             }
@@ -403,26 +984,42 @@ function generateBuild() {
   }
 
 
-  /*
-    If absolutely nothing fits,
-    tell the user instead of producing nonsense.
-  */
+  /* =====================================================
+     NO BUILD
+  ===================================================== */
 
   if (!candidates.length) {
 
     result.innerHTML = `
+
       <div class="buildResultHead">
+
         <div>
-          <small>NO COMPLETE BUILD FOUND</small>
-          <h3>${gameNames[game]} · ${resolution}</h3>
+
+          <small>
+            NO COMPLETE BUILD FOUND
+          </small>
+
+          <h3>
+            ${gameNames[game] || 'Gaming'} · ${resolution}
+          </h3>
+
         </div>
+
       </div>
 
+
       <p class="muted">
-        The current catalogue does not contain enough
-        compatible components to build a complete PC
+
+        The current PCDealFinder catalogue does not
+        contain a compatible combination that fits
         within ${money(budget)}.
+
+        Try increasing your budget or adding more
+        components to the catalogue.
+
       </p>
+
     `;
 
     result.scrollIntoView({
@@ -434,37 +1031,69 @@ function generateBuild() {
   }
 
 
-  /*
-    Highest-scoring build wins.
-  */
+  /* =====================================================
+     PICK BEST BUILD
+  ===================================================== */
 
   candidates.sort(
     (a, b) => b.score - a.score
   );
 
 
-  const build = candidates[0];
+  const build =
+    candidates[0];
 
-  const remaining = build.remaining;
+
+  /* =====================================================
+     LABEL PRIORITY
+  ===================================================== */
+
+  const priorityNames = {
+
+    performance:
+      'Maximum Performance',
+
+    balanced:
+      'Balanced',
+
+    value:
+      'Best Value'
+
+  };
 
 
-  /*
-    Display the final build.
-  */
+  /* =====================================================
+     RENDER BUILD
+  ===================================================== */
 
   result.innerHTML = `
+
     <div class="buildResultHead">
 
       <div>
-        <small>RECOMMENDED BUILD</small>
+
+        <small>
+          RECOMMENDED BUILD
+        </small>
+
         <h3>
-          ${gameNames[game]} · ${resolution}
+          ${gameNames[game] || 'General Gaming'}
+          · ${resolution}
         </h3>
+
       </div>
 
+
       <div class="buildTotal">
-        <small>TOTAL</small>
-        <strong>${money(build.total)}</strong>
+
+        <small>
+          TOTAL
+        </small>
+
+        <strong>
+          ${money(build.total)}
+        </strong>
+
       </div>
 
     </div>
@@ -472,19 +1101,29 @@ function generateBuild() {
 
     <div class="buildParts">
 
-      ${build.parts.map(p => `
+      ${build.parts.map(part => `
+
         <div class="buildPart">
 
           <div>
-            <small>${p.category}</small>
-            <b>${p.name}</b>
+
+            <small>
+              ${part.category || 'COMPONENT'}
+            </small>
+
+            <b>
+              ${part.name || 'Unnamed component'}
+            </b>
+
           </div>
 
+
           <strong>
-            ${money(p.bestOffer.price)}
+            ${money(productPrice(part))}
           </strong>
 
         </div>
+
       `).join('')}
 
     </div>
@@ -494,35 +1133,72 @@ function generateBuild() {
 
       <span>
         Budget:
-        <b>${money(budget)}</b>
+        <b>
+          ${money(budget)}
+        </b>
       </span>
 
-      <span>
-        ${remaining >= 0
-          ? 'Remaining ' + money(remaining)
-          : 'Over budget by ' + money(Math.abs(remaining))}
-      </span>
 
       <span>
+
+        ${
+          build.remaining > 0
+            ? 'Remaining ' +
+              money(build.remaining)
+
+            : build.remaining === 0
+              ? 'Budget fully used'
+
+              : 'Over budget by ' +
+                money(Math.abs(build.remaining))
+        }
+
+      </span>
+
+
+      <span>
+
         Priority:
-        <b>${priority}</b>
+        <b>
+          ${
+            priorityNames[priority] ||
+            priority
+          }
+        </b>
+
       </span>
 
     </div>
 
 
     <p class="muted">
-      Build selected from the current PCDealFinder
-      catalogue using budget, resolution, priority
-      and component compatibility.
-      Prices and compatibility should be verified
-      before purchase.
+
+      Recommended for
+      ${gameNames[game] || 'general gaming'}
+      at ${resolution}.
+
+      Components were selected from the current
+      PCDealFinder catalogue using compatibility,
+      budget and performance priorities.
+
+      Prices and compatibility should always be
+      verified before purchasing.
+
     </p>
+
   `;
 
 
+  /* =====================================================
+     SCROLL TO RESULT
+  ===================================================== */
+
   result.scrollIntoView({
+
     behavior: 'smooth',
+
     block: 'start'
+
   });
+
 }
