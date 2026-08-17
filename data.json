@@ -1,8 +1,236 @@
 [
- {"id":"ryzen-5-5600","name":"AMD Ryzen 5 5600","category":"CPU","mpn":"100-100000927BOX","offers":[{"retailer":"Wootware","price":2999,"stock":"In stock","url":"https://www.wootware.co.za/"},{"retailer":"Evetech","price":3099,"stock":"Check retailer","url":"https://www.evetech.co.za/"}]},
- {"id":"rtx-5070-ti","name":"Gigabyte GeForce RTX 5070 Ti WINDFORCE OC SFF 16G","category":"GPU","mpn":"GV-N507TWF3OC-16GD","offers":[{"retailer":"Wootware","price":21999,"stock":"Check retailer","url":"https://www.wootware.co.za/"},{"retailer":"Evetech","price":22499,"stock":"Check retailer","url":"https://www.evetech.co.za/"}]},
- {"id":"adata-legend-860","name":"ADATA Legend 860 1TB NVMe","category":"SSD","mpn":"SLEG-860-1000GCS","offers":[{"retailer":"Wootware","price":3199,"stock":"In stock","url":"https://www.wootware.co.za/"},{"retailer":"Evetech","price":3299,"stock":"Check retailer","url":"https://www.evetech.co.za/"}]},
- {"id":"superflower-750","name":"Super Flower Leadex III GE 750W Gold","category":"PSU","mpn":"SF-750F14GE","offers":[{"retailer":"Wootware","price":1899,"stock":"In stock","url":"https://www.wootware.co.za/"},{"retailer":"Evetech","price":1999,"stock":"Check retailer","url":"https://www.evetech.co.za/"}]},
- {"id":"asus-a520m-k","name":"ASUS PRIME A520M-K","category":"Motherboard","mpn":"PRIME-A520M-K","offers":[{"retailer":"Wootware","price":1099,"stock":"In stock","url":"https://www.wootware.co.za/"},{"retailer":"Evetech","price":1149,"stock":"Check retailer","url":"https://www.evetech.co.za/"}]},
- {"id":"gskill-16gb-ddr4","name":"G.Skill Ripjaws V 16GB (2x8GB) DDR4-3200","category":"RAM","mpn":"F4-3200C16D-16GVKB","offers":[{"retailer":"Wootware","price":2299,"stock":"In stock","url":"https://www.wootware.co.za/"},{"retailer":"Evetech","price":2399,"stock":"Check retailer","url":"https://www.evetech.co.za/"}]}
+  {
+    "id":"ryzen-5-5500",
+    "name":"AMD Ryzen 5 5500",
+    "category":"CPU",
+    "mpn":"100-100000457BOX",
+    "socket":"AM4",
+    "memory":"DDR4",
+    "offers":[
+      {"retailer":"Wootware","price":2199,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":2299,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"ryzen-5-5600",
+    "name":"AMD Ryzen 5 5600",
+    "category":"CPU",
+    "mpn":"100-100000927BOX",
+    "socket":"AM4",
+    "memory":"DDR4",
+    "offers":[
+      {"retailer":"Wootware","price":2999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":3099,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"ryzen-7-5700x",
+    "name":"AMD Ryzen 7 5700X",
+    "category":"CPU",
+    "mpn":"100-000000926WOF",
+    "socket":"AM4",
+    "memory":"DDR4",
+    "offers":[
+      {"retailer":"Wootware","price":3999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":4099,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+
+  {
+    "id":"rx-6600",
+    "name":"AMD Radeon RX 6600 8GB",
+    "category":"GPU",
+    "mpn":"RX-6600-8GB",
+    "tier":"entry",
+    "offers":[
+      {"retailer":"Wootware","price":4999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":5099,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"rtx-4060",
+    "name":"NVIDIA GeForce RTX 4060 8GB",
+    "category":"GPU",
+    "mpn":"RTX-4060-8GB",
+    "tier":"mid",
+    "offers":[
+      {"retailer":"Wootware","price":6999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":7199,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"rx-7600",
+    "name":"AMD Radeon RX 7600 8GB",
+    "category":"GPU",
+    "mpn":"RX-7600-8GB",
+    "tier":"mid",
+    "offers":[
+      {"retailer":"Wootware","price":6799,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":6999,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"rtx-4070-super",
+    "name":"NVIDIA GeForce RTX 4070 SUPER 12GB",
+    "category":"GPU",
+    "mpn":"RTX-4070-SUPER-12GB",
+    "tier":"high",
+    "offers":[
+      {"retailer":"Wootware","price":11999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":12299,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"rtx-5070-ti",
+    "name":"Gigabyte GeForce RTX 5070 Ti WINDFORCE OC SFF 16G",
+    "category":"GPU",
+    "mpn":"GV-N507TWF3OC-16GD",
+    "tier":"enthusiast",
+    "offers":[
+      {"retailer":"Wootware","price":21999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":22499,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+
+  {
+    "id":"kingspec-8gb-ddr4",
+    "name":"KingSpec 8GB DDR4-3200",
+    "category":"RAM",
+    "mpn":"KS3200-8GB",
+    "memory":"DDR4",
+    "capacity":8,
+    "offers":[
+      {"retailer":"Wootware","price":1099,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1199,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"gskill-16gb-ddr4",
+    "name":"G.Skill Ripjaws V 16GB (2x8GB) DDR4-3200",
+    "category":"RAM",
+    "mpn":"F4-3200C16D-16GVKB",
+    "memory":"DDR4",
+    "capacity":16,
+    "offers":[
+      {"retailer":"Wootware","price":2299,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":2399,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"gskill-32gb-ddr4",
+    "name":"G.Skill Ripjaws V 32GB (2x16GB) DDR4-3200",
+    "category":"RAM",
+    "mpn":"F4-3200C16D-32GVK",
+    "memory":"DDR4",
+    "capacity":32,
+    "offers":[
+      {"retailer":"Wootware","price":4399,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":4499,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+
+  {
+    "id":"kingston-500gb-nvme",
+    "name":"Kingston NV3 500GB NVMe",
+    "category":"SSD",
+    "mpn":"SNV3S-500G",
+    "capacity":500,
+    "offers":[
+      {"retailer":"Wootware","price":999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1099,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"adata-legend-860",
+    "name":"ADATA Legend 860 1TB NVMe",
+    "category":"SSD",
+    "mpn":"SLEG-860-1000GCS",
+    "capacity":1000,
+    "offers":[
+      {"retailer":"Wootware","price":3199,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":3299,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"wd-blue-1tb",
+    "name":"WD Blue SN580 1TB NVMe",
+    "category":"SSD",
+    "mpn":"WDS100T3B0E",
+    "capacity":1000,
+    "offers":[
+      {"retailer":"Wootware","price":1999,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":2099,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+
+  {
+    "id":"asus-a520m-k",
+    "name":"ASUS PRIME A520M-K",
+    "category":"Motherboard",
+    "mpn":"PRIME-A520M-K",
+    "socket":"AM4",
+    "memory":"DDR4",
+    "offers":[
+      {"retailer":"Wootware","price":1099,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1149,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"msi-b550m-pro",
+    "name":"MSI B550M PRO-VDH",
+    "category":"Motherboard",
+    "mpn":"B550M-PRO-VDH",
+    "socket":"AM4",
+    "memory":"DDR4",
+    "offers":[
+      {"retailer":"Wootware","price":1699,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1799,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"gigabyte-b550m",
+    "name":"Gigabyte B550M DS3H",
+    "category":"Motherboard",
+    "mpn":"B550M-DS3H",
+    "socket":"AM4",
+    "memory":"DDR4",
+    "offers":[
+      {"retailer":"Wootware","price":1799,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1899,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+
+  {
+    "id":"coolermaster-550",
+    "name":"Cooler Master MWE 550 Bronze",
+    "category":"PSU",
+    "mpn":"MWE-550-BRONZE",
+    "wattage":550,
+    "offers":[
+      {"retailer":"Wootware","price":1199,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1299,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"superflower-650",
+    "name":"Super Flower Leadex III 650W Gold",
+    "category":"PSU",
+    "mpn":"SF-650F14HG",
+    "wattage":650,
+    "offers":[
+      {"retailer":"Wootware","price":1699,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1799,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  },
+  {
+    "id":"superflower-750",
+    "name":"Super Flower Leadex III GE 750W Gold",
+    "category":"PSU",
+    "mpn":"SF-750F14GE",
+    "wattage":750,
+    "offers":[
+      {"retailer":"Wootware","price":1899,"stock":"Prototype","url":"https://www.wootware.co.za/"},
+      {"retailer":"Evetech","price":1999,"stock":"Prototype","url":"https://www.evetech.co.za/"}
+    ]
+  }
 ]
