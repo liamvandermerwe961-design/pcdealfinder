@@ -15,8 +15,6 @@ export default {
     }
     if(url.pathname==='/api/catalog'){
       try{
-        // Category pages explicitly request live-category so they always get a fresh feed.
-        if(url.searchParams.get('refresh')==='1'||url.searchParams.get('v')==='live-category')await refreshLiveCatalogue(env.DB);
         const products=sanitizeProducts(await getLiveCatalogue(env.DB));
         const category=url.searchParams.get('category');
         const supplier=url.searchParams.get('supplier');
