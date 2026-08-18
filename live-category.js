@@ -11,37 +11,22 @@
     cpu:'cpu', cpus:'cpu', processor:'cpu', processors:'cpu',
     gpu:'gpu', gpus:'gpu', 'graphics card':'gpu', 'graphics cards':'gpu', 'video card':'gpu', 'video cards':'gpu',
     ram:'ram', memory:'ram', memories:'ram',
-    ssd:'ssd', ssds:'ssd', nvme:'ssd',
-    hdd:'hdd', hdds:'hdd', 'hard drive':'hdd', 'hard drives':'hdd',
-    storage:'storage', 'computer storage':'storage',
-    motherboard:'motherboard', motherboards:'motherboard', mainboard:'motherboard',
-    psu:'psu', psus:'psu', 'power supply':'psu', 'power supplies':'psu',
-    case:'case', cases:'case', chassis:'case', 'pc case':'case', 'computer case':'case',
-    cooling:'cooling', 'cpu cooler':'cooling', 'cpu coolers':'cooling', 'liquid cooling':'cooling',
-    'case fan':'case fan', 'case fans':'case fan', fans:'case fan',
-    monitor:'monitor', monitors:'monitor', display:'monitor', displays:'monitor',
-    keyboard:'keyboard', keyboards:'keyboard', mouse:'mouse', mice:'mouse',
-    headset:'headset', headsets:'headset', headphones:'headset',
-    mousepad:'mousepad', 'mouse pad':'mousepad', 'mouse pads':'mousepad',
-    microphone:'microphone', microphones:'microphone', mic:'microphone',
-    webcam:'webcam', webcams:'webcam',
-    networking:'networking', network:'networking', router:'networking', routers:'networking',
-    rgb:'rgb', lighting:'rgb', 'rgb lighting':'rgb',
-    cable:'cables', cables:'cables', usb:'usb', 'usb accessories':'usb',
-    speaker:'speakers', speakers:'speakers', audio:'speakers',
-    'capture card':'capture cards', 'capture cards':'capture cards',
-    'external storage':'external storage', 'gaming device':'gaming devices', 'gaming devices':'gaming devices',
-    controllers:'gaming devices', gamepads:'gaming devices', ups:'ups', inverter:'ups', 'power station':'ups', 'surge protector':'ups',
-    accessory:'accessories', accessories:'accessories'
+    ssd:'ssd', ssds:'ssd', nvme:'ssd', hdd:'hdd', hdds:'hdd', 'hard drive':'hdd', 'hard drives':'hdd',
+    storage:'storage', 'computer storage':'storage', motherboard:'motherboard', motherboards:'motherboard', mainboard:'motherboard',
+    psu:'psu', psus:'psu', 'power supply':'psu', 'power supplies':'psu', case:'case', cases:'case', chassis:'case', 'pc case':'case', 'computer case':'case',
+    cooling:'cooling', 'cpu cooler':'cooling', 'cpu coolers':'cooling', 'liquid cooling':'cooling', 'case fan':'case fan', 'case fans':'case fan', fans:'case fan',
+    monitor:'monitor', monitors:'monitor', display:'monitor', displays:'monitor', keyboard:'keyboard', keyboards:'keyboard', mouse:'mouse', mice:'mouse',
+    headset:'headset', headsets:'headset', headphones:'headset', mousepad:'mousepad', 'mouse pad':'mousepad', 'mouse pads':'mousepad',
+    microphone:'microphone', microphones:'microphone', mic:'microphone', webcam:'webcam', webcams:'webcam', networking:'networking', network:'networking', router:'networking', routers:'networking',
+    rgb:'rgb', lighting:'rgb', 'rgb lighting':'rgb', cable:'cables', cables:'cables', usb:'usb', 'usb accessories':'usb', speakers:'speakers', speaker:'speakers', audio:'speakers',
+    'capture card':'capture cards', 'capture cards':'capture cards', 'external storage':'external storage', 'gaming device':'gaming devices', 'gaming devices':'gaming devices',
+    controllers:'gaming devices', gamepads:'gaming devices', ups:'ups', inverter:'ups', 'power station':'ups', 'surge protector':'ups', accessory:'accessories', accessories:'accessories'
   };
-
   const cat = v => aliases[norm(v)] || norm(v);
 
-  // Order matters: specific categories such as coolers/cases must be checked before generic CPU matches.
   const infer = p => {
     const supplied = cat(p?.category);
     const t = `${name(p)} ${p?.description || ''} ${p?.id || ''} ${p?.mpn || ''} ${p?.brand || ''} ${p?.category || ''}`.toLowerCase();
-
     if (/case fan|120mm.*fan|140mm.*fan|pwm fan/.test(t)) return 'case fan';
     if (/cpu cooler|cooler|cooling|aio|liquid cooler|water cooler|deepcool|arctic.*liquid|kraken|nh-d15|hyper 212/.test(t)) return 'cooling';
     if (/pc case|computer case|chassis|tower|meshify|nzxt.*h[567]|fractal.*north|lancool/.test(t)) return 'case';
@@ -95,30 +80,22 @@
     return asProducts(await r.json());
   };
 
+  // Never use the legacy static catalogue here. Category pages must only show verified live supplier data.
   const validOffers = p => [...(p?.offers || [])]
     .map(o => ({ ...o, price: Number(o?.price) }))
-    .filter(o => Number.isFinite(o.price) && o.price >= 10 && o.price <= 1000000)
+    .filter(o => Number.isFinite(o.price) && o.price >= 50 && o.price <= 1000000)
     .sort((a, b) => a.price - b.price);
 
-  // Live is always preferred. Static data is only a safety net when the live route is down,
-  // returns malformed prices, or returns products that do not match this category.
   let live = [];
-  try { live = await loadJson(`/api/catalog?v=category-live&_=${Date.now()}`); } catch (e) { console.warn('[PCDealFinder] live catalogue unavailable', e); }
-
-  let products = live.filter(matches).filter(p => validOffers(p).length);
-
-  if (!products.length) {
-    try {
-      const fallback = await loadJson(`/data.json?v=category-fallback&_=${Date.now()}`);
-      products = fallback.filter(matches).filter(p => validOffers(p).length);
-    } catch (e) {
-      console.error('[PCDealFinder] fallback catalogue unavailable', e);
-    }
+  try {
+    live = await loadJson(`/api/catalog?v=category-live&_=${Date.now()}`);
+  } catch (e) {
+    console.warn('[PCDealFinder] live catalogue unavailable', e);
   }
 
-  const allForRetailers = products;
+  const products = live.filter(matches).filter(p => validOffers(p).length);
   const rb = document.getElementById('retailer');
-  const retailers = [...new Set(allForRetailers.flatMap(p => validOffers(p).map(o => o.retailer).filter(Boolean)))].sort();
+  const retailers = [...new Set(products.flatMap(p => validOffers(p).map(o => o.retailer).filter(Boolean)))].sort();
   if (rb) rb.innerHTML = '<option value="all">All retailers</option>' + retailers.map(r => `<option value="${esc(r)}">${esc(r)}</option>`).join('');
 
   const render = () => {
@@ -147,13 +124,13 @@
         <div class="categoryProductInfo">
           <span class="tag">${esc(infer(p).toUpperCase())}</span>
           <h2 class="categoryProductName">${esc(name(p))}</h2>
-          <p>${esc(p.description || 'Product listing from the catalogue.')}</p>
+          <p>${esc(p.description || 'Verified live supplier listing.')}</p>
           <div class="categoryMeta">${p.brand ? `<span>${esc(p.brand)}</span>` : ''}${p.mpn ? `<span>MPN ${esc(p.mpn)}</span>` : ''}</div>
         </div>
         <div class="categoryPrice"><small>LOWEST PRICE</small><strong>R${o.price.toLocaleString('en-ZA')}</strong><span>${esc(o.retailer || 'Retailer')}</span></div>
         <div class="categoryOffers">${offers.map(x => `<div class="categoryOffer"><div><b>${esc(x.retailer || 'Retailer')}</b><br><span>${esc(x.stock || 'Stock unknown')}</span></div><div><b>R${x.price.toLocaleString('en-ZA')}</b>${x.url ? ` <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">View Deal →</a>` : ''}</div></div>`).join('')}</div>
       </article>`;
-    }).join('') : `<div class="emptyCategory"><h2>No products found</h2><p>We could not find valid priced products for this category yet. Try refreshing in a moment.</p></div>`;
+    }).join('') : `<div class="emptyCategory"><h2>No live products found</h2><p>The live catalogue returned no verified products for this category yet. No old catalogue data is being shown.</p></div>`;
   };
 
   render();
