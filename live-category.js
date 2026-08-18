@@ -80,7 +80,12 @@
     return asProducts(await r.json());
   };
 
-  // Never use the legacy static catalogue here. Category pages must only show verified live supplier data.
+  // Ask the backend for the actual category. The API will force a live refresh when
+  // that category is missing, instead of returning an already-populated catalogue
+  // containing unrelated products and making the frontend believe the category is empty.
+  const categoryParam = target && target !== 'all' ? `&category=${encodeURIComponent(target)}` : '';
+  const liveUrl = `/api/catalog?v=category-live&_=${Date.now()}${categoryParam}`;
+
   const validOffers = p => [...(p?.offers || [])]
     .map(o => ({ ...o, price: Number(o?.price) }))
     .filter(o => Number.isFinite(o.price) && o.price >= 50 && o.price <= 1000000)
@@ -88,7 +93,7 @@
 
   let live = [];
   try {
-    live = await loadJson(`/api/catalog?v=category-live&_=${Date.now()}`);
+    live = await loadJson(liveUrl);
   } catch (e) {
     console.warn('[PCDealFinder] live catalogue unavailable', e);
   }
